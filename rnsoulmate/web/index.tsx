@@ -2,7 +2,7 @@
 
 import { AppRegistry } from 'react-native';
 // 注意这里的路径，是从 web/index.tsx 到根目录下的 App.web.tsx
-import App from '../App.web'; 
+import App from '../App'; 
 import { name as appName } from '../app.json';
 
 // 运行应用
