@@ -2,10 +2,14 @@ import React from 'react';
 import { SafeAreaView, Text, StyleSheet } from 'react-native';
 import { Platform } from 'react-native';
 
+import {LoggerFactory} from './src/internal/logger/logger';
+
+const logger = LoggerFactory.getLogger('App');
 
 const App = () => {
   // 获取当前操作系统
   const currentPlatform = Platform.OS;
+  logger.info(`App is running on platform: ${currentPlatform}`);
 
   return (
     <SafeAreaView style={styles.container}>
