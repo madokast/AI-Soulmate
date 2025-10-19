@@ -2,7 +2,8 @@ import React from 'react';
 import { SafeAreaView, Text, StyleSheet } from 'react-native';
 import { Platform } from 'react-native';
 
-import {LoggerFactory} from './src/internal/logger/logger';
+import { LoggerFactory } from './src/internal/logger/logger';
+import { LoggingView } from './src/internal/logger/logging-view';
 
 const logger = LoggerFactory.getLogger('App');
 
@@ -11,10 +12,14 @@ const App = () => {
   const currentPlatform = Platform.OS;
   logger.info(`App is running on platform: ${currentPlatform}`);
 
+  logger.warn('This is a warning message from App component.');
+  logger.error('This is an error message from App component.');
+
   return (
     <SafeAreaView style={styles.container}>
       <Text style={styles.header}>Hello, World!</Text>
       <Text style={styles.paragraph}>My React Native App is running on the {currentPlatform}!</Text>
+      <LoggingView />
     </SafeAreaView>
   );
 };

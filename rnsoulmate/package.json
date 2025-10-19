@@ -8,7 +8,7 @@
     "lint": "eslint .",
     "start": "react-native start",
     "test": "jest",
-    "windows": "npx @react-native-community/cli run-windows",
+    "win": "npx @react-native-community/cli run-windows",
     "web": "vite",
     "web-build": "vite build",
     "web-preview": "vite preview"
