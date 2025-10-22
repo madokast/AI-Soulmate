@@ -1,5 +1,4 @@
-import { logger, consoleTransport, transportFunctionType } from "react-native-logs";
-import type { ConsoleTransportOptions } from "react-native-logs/dist/transports/consoleTransport";
+import { logger, consoleTransport } from "react-native-logs";
 import { Platform } from "react-native";
 
 import { nowTime } from '../data-time';
@@ -28,6 +27,7 @@ class LoggingItem {
 }
 
 const LoggingMessages: Array<LoggingItem> = [];
+const LoggingNotifys: Array<()=>void> = [];
 
 const defaultConfig = {
   // 定义日志级别
@@ -53,6 +53,8 @@ const defaultConfig = {
       const time = nowTime();
       const index = LoggingMessages.length > 0 ? LoggingMessages[LoggingMessages.length - 1].id + 1 : 0;
       LoggingMessages.push(new LoggingItem(index, time, props.level.text, props.msg));
+
+      LoggingNotifys.forEach(fn => fn()); // 通知所有监听器
     }
   },
   async: true,
@@ -98,5 +100,5 @@ class LoggerFactory {
   }
 }
 
-export { defaultConfig, LoggerFactory, LoggingMessages };
+export { defaultConfig, LoggerFactory, LoggingMessages, LoggingNotifys };
 export type { LoggingItem };

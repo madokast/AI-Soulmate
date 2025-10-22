@@ -13,7 +13,9 @@ const App = () => {
   logger.info(`App is running on platform: ${currentPlatform}`);
 
   logger.warn('This is a warning message from App component.');
-  logger.error('This is an error message from App component.');
+  setInterval(() => {
+    logger.error('This is an error message from App component.');
+  }, 2000);
 
   return (
     <SafeAreaView style={styles.container}>

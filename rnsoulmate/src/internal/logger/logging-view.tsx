@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, FlatList, StyleSheet, Text, StatusBar, Dimensions } from 'react-native';
 
-import { LoggingMessages } from './logger-factory';
+import { LoggingMessages, LoggingNotifys } from './logger-factory';
 import type { LoggingItem } from './logger-factory';
 
 const LoggingView = () => {
@@ -10,13 +10,10 @@ const LoggingView = () => {
     const [messages, setMessages] = React.useState<Array<LoggingItem>>([]);
 
     const freshMessages = () => {
-        setMessages([...LoggingMessages].reverse());
+        setMessages([...LoggingMessages]);
     }
 
-    React.useEffect(() => {
-        const interval = setInterval(freshMessages, 2000);
-        return () => clearInterval(interval);
-    }, []);
+    LoggingNotifys.push(freshMessages);
 
     return <View style={{ height: viewHeight }}>
         <FlatList
