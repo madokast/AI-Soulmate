@@ -27,7 +27,7 @@ class LoggingItem {
 }
 
 const LoggingMessages: Array<LoggingItem> = [];
-const LoggingNotifys: Array<()=>void> = [];
+const LoggingNotifiers: Array<()=>void> = [];
 
 const defaultConfig = {
   // 定义日志级别
@@ -54,7 +54,7 @@ const defaultConfig = {
       const index = LoggingMessages.length > 0 ? LoggingMessages[LoggingMessages.length - 1].id + 1 : 0;
       LoggingMessages.push(new LoggingItem(index, time, props.level.text, props.msg));
 
-      LoggingNotifys.forEach(fn => fn()); // 通知所有监听器
+      LoggingNotifiers.forEach(fn => fn()); // 通知所有监听器
     }
   },
   async: true,
@@ -100,5 +100,5 @@ class LoggerFactory {
   }
 }
 
-export { defaultConfig, LoggerFactory, LoggingMessages, LoggingNotifys };
+export { defaultConfig, LoggerFactory, LoggingMessages, LoggingNotifiers };
 export type { LoggingItem };

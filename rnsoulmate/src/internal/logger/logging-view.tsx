@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, FlatList, StyleSheet, Text, StatusBar, Dimensions } from 'react-native';
 
-import { LoggingMessages, LoggingNotifys } from './logger-factory';
+import { LoggingMessages, LoggingNotifiers } from './logger-factory';
 import type { LoggingItem } from './logger-factory';
 
 const LoggingView = () => {
@@ -13,7 +13,7 @@ const LoggingView = () => {
         setMessages([...LoggingMessages]);
     }
 
-    LoggingNotifys.push(freshMessages);
+    LoggingNotifiers.push(freshMessages);
 
     return <View style={{ height: viewHeight }}>
         <FlatList

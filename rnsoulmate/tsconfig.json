@@ -6,6 +6,7 @@
       我们需要覆盖 "lib" 选项，在 React Native 的基础上
       额外添加 "dom" 类型库，以支持 Web 环境。
     */
-    "lib": ["esnext", "dom"]
+    "lib": ["esnext", "dom"],
+    "customConditions": ["react-native-strict-api"]
   }
 }
