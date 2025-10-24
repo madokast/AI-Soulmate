@@ -6,9 +6,4 @@ enum OS {
     MacOS = "macos",
 }
 
-enum ColorMode {
-    Light = "light",
-    Dark = "dark",
-}
-
-export { OS, ColorMode }
+export { OS }

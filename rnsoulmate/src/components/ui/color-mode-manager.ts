@@ -43,6 +43,7 @@ class ColorModeManager {
 
   // 获取当前应该呈现的颜色模式
   current(): ColorMode {
+    // 返回用户指定的模式，除非 AUTO
     switch (this.userDefaultColorMode) {
       case ColorModeAuto.Light:
         return ColorMode.Light;

@@ -7,7 +7,7 @@ interface Props {
   colorMode: ColorMode;
 }
 
-function MainText(props: Props) {
+function SmallText(props: Props){
     const colorMode = props.colorMode;
     const text = props.text;
     return (
@@ -17,14 +17,14 @@ function MainText(props: Props) {
 
 const styles = StyleSheet.create({
   mainText: {
-    fontSize: 20,
+    fontSize: 16,
   },
   light: {
-    "color": "rgb(20, 20, 20)"
+    "color": "rgb(50, 50, 50)"
   },
   dark: {
-    "color": "rgb(200, 200, 200)"
+    "color": "rgb(150, 150, 150)"
   }
 });
 
-export default MainText;
+export default SmallText;
