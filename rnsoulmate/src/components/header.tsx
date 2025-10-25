@@ -20,6 +20,7 @@ function Header(props: Props) {
 const styles = StyleSheet.create({
   container: {
     height: 60,
+    alignItems: "center",
   },
 });
 

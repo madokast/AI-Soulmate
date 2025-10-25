@@ -1,15 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { SafeAreaView, StyleSheet, ScrollView } from 'react-native';
+import { SafeAreaView, StatusBar, StyleSheet, ScrollView } from 'react-native';
 import { useColorScheme as useDeviceColorMode } from 'react-native';
 import { Platform } from 'react-native';
 
 import { LoggerFactory } from './src/internal/logger/logger';
 import { OS } from './src/internal/system';
 
-import MainText from './src/components/base/main-text';
 import Post from './src/components/post';
 import Header from './src/components/header';
-import Footer from './src/components/Footer';
 import { ColorModeManager } from './src/components/ui/color-mode-manager';
 
 const logger = LoggerFactory.getLogger('App');
@@ -51,15 +49,21 @@ const App = () => {
 
   return (
     <SafeAreaView style={[styles.body, styles[colorMode]]}>
-      <Header colorMode={colorMode} />
-      <ScrollView style={{flex:1}}>
-        <MainText text='Hello, World!' colorMode={colorMode} />
-        <MainText text={"My React Native App is running on the " + currentPlatform + "!"} colorMode={colorMode} />
-        <MainText text={"Current color mode is " + colorMode + "!"} colorMode={colorMode} />
-        <Post content='This is a post!' attachments={[{url:'https://cdn.pixabay.com/photo/2025/05/23/06/35/sparrow-9617024_1280.jpg'}]}
-          colorMode={colorMode} />
-      </ScrollView>
-      <Footer colorMode={colorMode} />
+        <Header colorMode={colorMode} />
+        <ScrollView>
+          <Post content='This is a post!如果子组件的 backgroundColor 与父组件相同，且边框宽度较细，可能会被背景色 “覆盖” 视觉效果（实际边框存在，但颜色与背景融合）。' attachments={[{ url: 'https://cdn.pixabay.com/photo/2025/05/23/06/35/sparrow-9617024_1280.jpg' }, { url: 'https://cdn.pixabay.com/photo/2025/05/23/06/35/sparrow-9617024_1280.jpg' }]}
+            colorMode={colorMode} />
+          <Post content='This is a post!' attachments={[{ url: 'https://cdn.pixabay.com/photo/2025/05/23/06/35/sparrow-9617024_1280.jpg' }, { url: 'https://cdn.pixabay.com/photo/2025/05/23/06/35/sparrow-9617024_1280.jpg' }]}
+            colorMode={colorMode} />
+          <Post content='This is a post!' attachments={[{ url: 'https://cdn.pixabay.com/photo/2025/05/23/06/35/sparrow-9617024_1280.jpg' }, { url: 'https://cdn.pixabay.com/photo/2025/05/23/06/35/sparrow-9617024_1280.jpg' }]}
+            colorMode={colorMode} />
+          <Post content='This is a post!' attachments={[{ url: 'https://cdn.pixabay.com/photo/2025/05/23/06/35/sparrow-9617024_1280.jpg' }]}
+            colorMode={colorMode} />
+          <Post content='This is a post!' attachments={[{ url: 'https://cdn.pixabay.com/photo/2025/05/23/06/35/sparrow-9617024_1280.jpg' }]}
+            colorMode={colorMode} />
+          <Post content='This is a post!' attachments={[{ url: 'https://cdn.pixabay.com/photo/2025/05/23/06/35/sparrow-9617024_1280.jpg' }]}
+            colorMode={colorMode} />
+        </ScrollView>
     </SafeAreaView>
   );
 };
@@ -67,8 +71,9 @@ const App = () => {
 const styles = StyleSheet.create({
   body: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    alignItems: 'stretch',
+    // 为安卓设备添加等于状态栏高度的上边距
+    paddingTop: Platform.OS === OS.Android ? StatusBar.currentHeight : 0
   },
   light: {
     backgroundColor: 'rgb(255, 255, 255)', // 白色背景，适合浅色模式
