@@ -25,7 +25,7 @@ class ColorModeManager {
   private userDefaultColorMode: ColorModeAuto;
   private currentColorMode: ColorMode;
 
-  constructor(userDefaultColorMode: string) {
+  constructor(userDefaultColorMode?: string) {
     logger.info(`new ColorModeManager with default color mode: ${userDefaultColorMode}`)
     switch (userDefaultColorMode) {
       case ColorMode.Light:

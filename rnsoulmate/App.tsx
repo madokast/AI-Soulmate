@@ -12,12 +12,10 @@ import Header from './src/components/header';
 import Footer from './src/components/Footer';
 import { ColorModeManager } from './src/components/ui/color-mode-manager';
 
-import { colorMode as settingColorMode } from './app.json';
-
 const logger = LoggerFactory.getLogger('App');
 
 // 创建颜色模式管理器
-const colorModeManager = new ColorModeManager(settingColorMode);
+const colorModeManager = new ColorModeManager();
 
 const App = () => {
   // 获取当前操作系统
@@ -53,7 +51,7 @@ const App = () => {
 
   return (
     <SafeAreaView style={[styles.body, styles[colorMode]]}>
-      <Header />
+      <Header colorMode={colorMode} />
       <ScrollView style={{flex:1}}>
         <MainText text='Hello, World!' colorMode={colorMode} />
         <MainText text={"My React Native App is running on the " + currentPlatform + "!"} colorMode={colorMode} />
@@ -61,7 +59,7 @@ const App = () => {
         <Post content='This is a post!' attachments={[{url:'https://cdn.pixabay.com/photo/2025/05/23/06/35/sparrow-9617024_1280.jpg'}]}
           colorMode={colorMode} />
       </ScrollView>
-      <Footer />
+      <Footer colorMode={colorMode} />
     </SafeAreaView>
   );
 };
