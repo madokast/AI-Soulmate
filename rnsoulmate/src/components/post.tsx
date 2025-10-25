@@ -1,10 +1,9 @@
 import React from "react";
-import { JSX } from "react";
 import { StyleSheet, View, Image } from "react-native";
 import { ImageURISource } from "react-native";
 
-import MainText from "./main-text";
-import SmallText from "./small-text";
+import MainText from "./base/main-text";
+import SmallText from "./base/small-text";
 import { ColorMode } from "./ui/color-mode-manager";
 
 interface Attachment {

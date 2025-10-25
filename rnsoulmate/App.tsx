@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { SafeAreaView, StyleSheet } from 'react-native';
+import { SafeAreaView, StyleSheet, ScrollView } from 'react-native';
 import { useColorScheme as useDeviceColorMode } from 'react-native';
 import { Platform } from 'react-native';
 
 import { LoggerFactory } from './src/internal/logger/logger';
 import { OS } from './src/internal/system';
 
-import MainText from './src/components/main-text';
+import MainText from './src/components/base/main-text';
 import Post from './src/components/post';
+import Header from './src/components/header';
+import Footer from './src/components/Footer';
 import { ColorModeManager } from './src/components/ui/color-mode-manager';
 
 import { colorMode as settingColorMode } from './app.json';
@@ -51,11 +53,15 @@ const App = () => {
 
   return (
     <SafeAreaView style={[styles.body, styles[colorMode]]}>
-      <MainText text='Hello, World!' colorMode={colorMode} />
-      <MainText text={"My React Native App is running on the " + currentPlatform + "!"} colorMode={colorMode} />
-      <MainText text={"Current color mode is " + colorMode + "!"} colorMode={colorMode} />
-      <Post content='This is a post!' attachments={[{url:'https://cdn.pixabay.com/photo/2025/05/23/06/35/sparrow-9617024_1280.jpg'}]}
-        colorMode={colorMode} />
+      <Header />
+      <ScrollView style={{flex:1}}>
+        <MainText text='Hello, World!' colorMode={colorMode} />
+        <MainText text={"My React Native App is running on the " + currentPlatform + "!"} colorMode={colorMode} />
+        <MainText text={"Current color mode is " + colorMode + "!"} colorMode={colorMode} />
+        <Post content='This is a post!' attachments={[{url:'https://cdn.pixabay.com/photo/2025/05/23/06/35/sparrow-9617024_1280.jpg'}]}
+          colorMode={colorMode} />
+      </ScrollView>
+      <Footer />
     </SafeAreaView>
   );
 };
