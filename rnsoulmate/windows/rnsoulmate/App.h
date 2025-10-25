@@ -6,7 +6,7 @@
 
 namespace activation = winrt::Windows::ApplicationModel::Activation;
 
-namespace winrt::rnsoulmate::implementation
+namespace winrt::SoulM::implementation
 {
     struct App : AppT<App>
     {
@@ -18,4 +18,4 @@ namespace winrt::rnsoulmate::implementation
       private:
         using super = AppT<App>;
     };
-} // namespace winrt::rnsoulmate::implementation
+} // namespace winrt::SoulM::implementation

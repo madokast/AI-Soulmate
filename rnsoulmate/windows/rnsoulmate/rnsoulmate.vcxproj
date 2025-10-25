@@ -7,8 +7,8 @@
     <CppWinRTRootNamespaceAutoMerge>true</CppWinRTRootNamespaceAutoMerge>
     <MinimalCoreWin>true</MinimalCoreWin>
     <ProjectGuid>{8c154e6d-ed80-4900-a8fb-f1898bb0f76f}</ProjectGuid>
-    <ProjectName>rnsoulmate</ProjectName>
-    <RootNamespace>rnsoulmate</RootNamespace>
+    <ProjectName>SoulM</ProjectName>
+    <RootNamespace>SoulM</RootNamespace>
     <DefaultLanguage>en-US</DefaultLanguage>
     <MinimumVisualStudioVersion>17.0</MinimumVisualStudioVersion>
     <AppContainerApplication>true</AppContainerApplication>

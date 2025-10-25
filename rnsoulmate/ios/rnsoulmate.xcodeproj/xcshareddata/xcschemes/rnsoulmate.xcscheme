@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-               BuildableName = "rnsoulmate.app"
-               BlueprintName = "rnsoulmate"
-               ReferencedContainer = "container:rnsoulmate.xcodeproj">
+               BuildableName = "SoulM.app"
+               BlueprintName = "SoulM"
+               ReferencedContainer = "container:SoulM.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -33,9 +33,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "00E356ED1AD99517003FC87E"
-               BuildableName = "rnsoulmateTests.xctest"
-               BlueprintName = "rnsoulmateTests"
-               ReferencedContainer = "container:rnsoulmate.xcodeproj">
+               BuildableName = "SoulMTests.xctest"
+               BlueprintName = "SoulMTests"
+               ReferencedContainer = "container:SoulM.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -55,9 +55,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "rnsoulmate.app"
-            BlueprintName = "rnsoulmate"
-            ReferencedContainer = "container:rnsoulmate.xcodeproj">
+            BuildableName = "SoulM.app"
+            BlueprintName = "SoulM"
+            ReferencedContainer = "container:SoulM.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -72,9 +72,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "rnsoulmate.app"
-            BlueprintName = "rnsoulmate"
-            ReferencedContainer = "container:rnsoulmate.xcodeproj">
+            BuildableName = "SoulM.app"
+            BlueprintName = "SoulM"
+            ReferencedContainer = "container:SoulM.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

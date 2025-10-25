@@ -14,7 +14,7 @@
   <mp:PhoneIdentity PhoneProductId="5771b4eb-c5a2-41db-ae4c-a320cbc0a2a8" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
 
   <Properties>
-    <DisplayName>rnsoulmate</DisplayName>
+    <DisplayName>SoulM</DisplayName>
     <PublisherDisplayName>zhaorx</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
@@ -31,12 +31,12 @@
     <Application
       Id="App"
       Executable="$targetnametoken$.exe"
-      EntryPoint="rnsoulmate.App">
+      EntryPoint="SoulM.App">
       <uap:VisualElements
-        DisplayName="rnsoulmate"
+        DisplayName="SoulM"
         Square150x150Logo="Assets\Square150x150Logo.png"
         Square44x44Logo="Assets\Square44x44Logo.png"
-        Description="rnsoulmate"
+        Description="SoulM"
         BackgroundColor="transparent">
         <uap:DefaultTile Wide310x150Logo="Assets\Wide310x150Logo.png"/>
         <uap:SplashScreen Image="Assets\SplashScreen.png" />

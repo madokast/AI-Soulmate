@@ -9,7 +9,7 @@
 using namespace winrt;
 using namespace xaml;
 
-namespace winrt::rnsoulmate::implementation
+namespace winrt::SoulM::implementation
 {
     MainPage::MainPage()
     {

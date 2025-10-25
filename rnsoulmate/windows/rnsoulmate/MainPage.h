@@ -2,7 +2,7 @@
 #include "MainPage.g.h"
 #include <winrt/Microsoft.ReactNative.h>
 
-namespace winrt::rnsoulmate::implementation
+namespace winrt::SoulM::implementation
 {
     struct MainPage : MainPageT<MainPage>
     {
@@ -10,7 +10,7 @@ namespace winrt::rnsoulmate::implementation
     };
 }
 
-namespace winrt::rnsoulmate::factory_implementation
+namespace winrt::SoulM::factory_implementation
 {
     struct MainPage : MainPageT<MainPage, implementation::MainPage>
     {

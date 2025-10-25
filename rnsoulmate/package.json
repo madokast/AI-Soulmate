@@ -1,5 +1,5 @@
 {
-  "name": "rnsoulmate",
+  "name": "SoulM",
   "version": "0.0.1",
   "private": true,
   "scripts": {
@@ -51,8 +51,8 @@
   },
   "react-native-windows": {
     "init-windows": {
-      "name": "rnsoulmate",
-      "namespace": "rnsoulmate",
+      "name": "SoulM",
+      "namespace": "SoulM",
       "template": "old/uwp-cpp-app"
     }
   }
