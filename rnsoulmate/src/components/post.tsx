@@ -45,7 +45,6 @@ function attachmentView(items: Attachment[], colorMode: ColorMode) {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     alignItems: "flex-start",
     justifyContent: "center",
     padding: 5,

@@ -17,11 +17,13 @@ function Header(props: Props) {
   );
 }
 
+const HeaderHeight = 60;
+
 const styles = StyleSheet.create({
   container: {
-    height: 60,
+    height: HeaderHeight,
     alignItems: "center",
   },
 });
 
-export default Header;
+export {Header, HeaderHeight};
