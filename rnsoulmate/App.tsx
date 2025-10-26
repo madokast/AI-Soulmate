@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react';
-import { SafeAreaView, StatusBar, StyleSheet, Dimensions } from 'react-native';
+import { SafeAreaView, StatusBar, StyleSheet } from 'react-native';
 import { Platform } from 'react-native';
 
 import { LoggerFactory } from './src/internal/logger/logger';
 import { OS } from './src/internal/system';
+import { AliOssFileSystem } from './src/internal/filesystem/ali-oss-fs';
+import config from './config.json';
 
 import MainWindow from './src/components/main-window';
 import { ColorModeManager } from './src/components/ui/color-mode-manager';
@@ -16,7 +17,17 @@ const colorModeManager = new ColorModeManager();
 // 创建窗口尺寸管理器
 const windowDimensionManager = new WindowDimensionManager();
 
+const fs = new AliOssFileSystem(config['ali-oss']);
+
 const App = () => {
+  fs.read("test/from-python-sdk-v2-202509282026.txt").then((blob) => {
+    logger.info(`Read blob size: ${blob.size} b`);
+    // to utf8 string
+    blob.text().then((text) => {
+      logger.info(`Blob text: ${text}`);
+    });
+  })
+
   const colorMode = colorModeManager.useValue();
   const windowDimension = windowDimensionManager.useValue();
 

@@ -1,0 +1,9 @@
+{
+  "ali-oss": {
+    "region": "oss-cn-shenzhen",
+    "authorizationV4": true,
+    "accessKeyId": "",
+    "accessKeySecret": "",
+    "bucket": "oss-"
+  }
+}
