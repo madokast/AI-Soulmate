@@ -20,14 +20,6 @@ const windowDimensionManager = new WindowDimensionManager();
 const fs = new AliOssFileSystem(config['ali-oss']);
 
 const App = () => {
-  fs.read("test/from-python-sdk-v2-202509282026.txt").then((blob) => {
-    logger.info(`Read blob size: ${blob.size} b`);
-    // to utf8 string
-    blob.text().then((text) => {
-      logger.info(`Blob text: ${text}`);
-    });
-  })
-
   const colorMode = colorModeManager.useValue();
   const windowDimension = windowDimensionManager.useValue();
 
