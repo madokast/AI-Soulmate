@@ -1,6 +1,6 @@
 
 import { StyleSheet, Text } from "react-native";
-import { ColorMode } from "./ui/color-mode-manager";
+import { ColorMode } from "../ui/color-mode-manager";
 
 interface Props {
   text: string;
