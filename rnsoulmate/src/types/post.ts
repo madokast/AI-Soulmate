@@ -32,12 +32,17 @@ const ExamplePosts: Array<Post> = [
     id: 4,
     content: "sparrow",
     attachments: [
-      {
-        path: "20251103T173000-test-sparrow.jpg",
-        media_type: "image/jpeg",
-      }
+      // {
+      //   path: "20251103T173000-test-sparrow.jpg",
+      //   media_type: "image/jpeg",
+      // }
     ],
     created_at: 1762162362941,
+  },
+  {
+    id: 5,
+    content: "这个警告是浏览器关于事件监听器性能优化的提示，主要与滚动事件（这里是 wheel 事件）的处理有关。\n警告含义：\n当你给 wheel 事件（鼠标滚轮事件）添加监听器时，浏览器无法确定你的事件处理函数是否会调用 preventDefault() 来阻止默认滚动行为。为了确保滚动流畅，浏览器需要提前知道是否可以放心地进行滚动渲染，否则可能会因为等待事件处理而导致滚动卡顿。",
+    created_at: 1762162350939,
   }
 ]
 

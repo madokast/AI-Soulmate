@@ -1,11 +1,11 @@
 import React from "react";
-import { StyleSheet, View, Image } from "react-native";
-import { ImageURISource } from "react-native";
+import { StyleSheet, View } from "react-native";
 
 import MainText from "./base/main-text";
 import SmallText from "./base/small-text";
 import Attachment from "./attachment";
 
+import { timestampToDateTime } from "../internal/data-time";
 import { ColorMode } from "./ui/color-mode-manager";
 import { Post as PostType, Attachment as AttachmentType } from "../types/post";
 
@@ -16,13 +16,17 @@ interface Props {
 
 function Post(props: Props) {
   const post = props.post;
+  const time = timestampToDateTime(post.created_at);
+  const id = post.id;
   return (
     <View style={[styles.container, styles[props.colorMode]]}>
       <View style={{ flexDirection: 'row', alignItems: 'flex-start' }}>
-        <View style={{flex:1}}><MainText text={post.content} colorMode={props.colorMode} /></View>
-            {attachmentView(post.attachments, props.colorMode)}
+        <View style={{ flex: 1 }}>
+          <MainText text={post.content} colorMode={props.colorMode} />
         </View>
-      <SmallText text="2025-10-24 17:44" colorMode={props.colorMode} />
+        {attachmentView(post.attachments, props.colorMode)}
+      </View>
+      <SmallText text={`${time} #${id}`} colorMode={props.colorMode} />
     </View>
   );
 }
@@ -32,7 +36,7 @@ function attachmentView(items: AttachmentType[] | undefined, colorMode: ColorMod
     return [];
   }
 
-  return items.map(attachment => Attachment({attachment:attachment, colorMode:colorMode}));
+  return items.map(attachment => Attachment({ attachment: attachment, colorMode: colorMode }));
 }
 
 const styles = StyleSheet.create({

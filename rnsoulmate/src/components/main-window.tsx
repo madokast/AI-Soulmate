@@ -1,14 +1,14 @@
 
 
 import {useEffect} from 'react';
-import { View, StyleSheet, ScrollView, FlatList, Platform } from 'react-native';
+import { View, StyleSheet, FlatList, Platform } from 'react-native';
 import { ListRenderItemInfo } from 'react-native';
 
 import { ColorMode } from "./ui/color-mode-manager";
 
-import { Attachment, Post } from '../types/post';
+import { Post } from '../types/post';
 import { ExamplePosts } from '../types/post';
-import {Header, HeaderHeight} from './header';
+import { Header, HeaderHeight } from './header';
 import PostUI from './post';
 import { OS } from '../internal/system';
 
@@ -34,9 +34,7 @@ function MainWindow(props: Props) {
     }
   }, []);
 
-
-
-  const data: Array<Post> = ExamplePosts;
+  const data: Array<Post> = ExamplePosts.slice().reverse();
 
   const Item = (itemInfo: ListRenderItemInfo<Post>) => {
     const item = itemInfo.item;
@@ -49,6 +47,7 @@ function MainWindow(props: Props) {
       data={data}
       renderItem={Item}
       keyExtractor={item => item.id.toString()}
+      style={{height:props.height - HeaderHeight}}
     />
   </View>
 }

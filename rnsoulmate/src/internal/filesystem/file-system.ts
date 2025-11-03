@@ -4,11 +4,18 @@ interface FileStat {
   size: number;
 }
 
+interface ReadOptions {
+  path: string;
+  offset?: number;
+  size?: number;
+  mediaType?: string;
+}
+
 interface IFileSystem {
-  read(path:string): Promise<Blob>;
+  read(options: ReadOptions): Promise<Blob>;
   upload(path:string, data:Blob): Promise<void>;
   append(path:string, data:Blob): Promise<void>;
   stat(path:string): Promise<FileStat>;
 }
 
-export type { IFileSystem, FileStat };
+export type { IFileSystem, FileStat, ReadOptions };

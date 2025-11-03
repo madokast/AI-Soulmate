@@ -1,5 +1,5 @@
 
-import { IFileSystem, FileStat } from "./file-system";
+import { IFileSystem, FileStat, ReadOptions } from "./file-system";
 import OSS from 'ali-oss';
 import { LoggerFactory } from "../../internal/logger/logger";
 
@@ -10,14 +10,16 @@ class AliOssFileSystem implements IFileSystem {
   constructor(options: OSS.Options) {
     this.client = new OSS(options);
   }
-  async read(path: string, offset:number=0, size:number=1073741824 /*1G*/): Promise<Blob> {
-    const result = await this.client.get(path, {
+  async read(options: ReadOptions): Promise<Blob> {
+    const { offset = 0, size = 1073741824} = options;
+    const { mediaType = "application/octet-stream"} = options;
+    const result = await this.client.get(options.path, {
       headers: {
         Range: `bytes=${offset}-${size}`
       }
     })
-    logger.debug(`Read ${path}, length: ${result.content?.byteLength} b`);
-    return new Blob([result.content], { type: "application/octet-stream" });
+    logger.debug(`Read ${options.path}, length: ${result.content?.byteLength} b`);
+    return new Blob([result.content], { type: mediaType });
   }
   async upload(path: string, data: Blob): Promise<void> {
     await this.client.put(path, data);
