@@ -6,7 +6,16 @@
     "accessKeySecret": "",
     "bucket": "oss-"
   },
+  "paths": {
+    "content": "soulm/contents.jsonl",
+    "attachment": "soulm/files"
+  },
+  "imageWidth": 100,
   "aes": {
-    "key-20251027": "<KEY>"
+    "key-20251027": ""
+  },
+  "loadingImg": {
+    "light":"data:image/jpeg;base64,",
+    "dark":"data:image/jpeg;base64,"
   }
 }
