@@ -1,18 +1,21 @@
 
 
 import {useEffect} from 'react';
-import { View, StyleSheet, ScrollView, Platform } from 'react-native';
+import { View, StyleSheet, ScrollView, FlatList, Platform } from 'react-native';
+import { ListRenderItemInfo } from 'react-native';
 
 import { ColorMode } from "./ui/color-mode-manager";
 
+import { Attachment, Post } from '../types/post';
+import { ExamplePosts } from '../types/post';
 import {Header, HeaderHeight} from './header';
-import Post from './post';
+import PostUI from './post';
 import { OS } from '../internal/system';
 
 
 interface Props {
   colorMode: ColorMode;
-  height: number
+  height: number;
   width: number;
 }
 
@@ -31,36 +34,22 @@ function MainWindow(props: Props) {
     }
   }, []);
 
+
+
+  const data: Array<Post> = ExamplePosts;
+
+  const Item = (itemInfo: ListRenderItemInfo<Post>) => {
+    const item = itemInfo.item;
+    return <PostUI post={item} colorMode={colorMode} />
+  };
+
   return <View style={[styles.body, styles[colorMode], {height: props.height, width: props.width}]}>
     <Header colorMode={colorMode}/>
-    <ScrollView id='main-window-scroll-view' indicatorStyle={indicatorStyle}>
-      <Post content='This is a post!如果子组件的 backgroundColor 与父组件相同，且边框宽度较细，可能会被背景色 “覆盖” 视觉效果（实际边框存在，但颜色与背景融合）。' attachments={[{ url: 'https://cdn.pixabay.com/photo/2025/05/23/06/35/sparrow-9617024_1280.jpg' }, { url: 'https://cdn.pixabay.com/photo/2025/05/23/06/35/sparrow-9617024_1280.jpg' }]}
-        colorMode={colorMode} />
-      <Post content='This is a post!' attachments={[{ url: 'https://cdn.pixabay.com/photo/2025/05/23/06/35/sparrow-9617024_1280.jpg' }, { url: 'https://cdn.pixabay.com/photo/2025/05/23/06/35/sparrow-9617024_1280.jpg' }]}
-        colorMode={colorMode} />
-      <Post content='This is a post!' attachments={[{ url: 'https://cdn.pixabay.com/photo/2025/05/23/06/35/sparrow-9617024_1280.jpg' }, { url: 'https://cdn.pixabay.com/photo/2025/05/23/06/35/sparrow-9617024_1280.jpg' }]}
-        colorMode={colorMode} />
-      <Post content='This is a post!' attachments={[{ url: 'https://cdn.pixabay.com/photo/2025/05/23/06/35/sparrow-9617024_1280.jpg' }]}
-        colorMode={colorMode} />
-        <Post content='This is a post!' attachments={[{ url: 'https://cdn.pixabay.com/photo/2025/05/23/06/35/sparrow-9617024_1280.jpg' }]}
-        colorMode={colorMode} />
-        <Post content='This is a post!' attachments={[{ url: 'https://cdn.pixabay.com/photo/2025/05/23/06/35/sparrow-9617024_1280.jpg' }]}
-        colorMode={colorMode} />
-        <Post content='This is a post!' attachments={[{ url: 'https://cdn.pixabay.com/photo/2025/05/23/06/35/sparrow-9617024_1280.jpg' }]}
-        colorMode={colorMode} />
-        <Post content='This is a post!' attachments={[{ url: 'https://cdn.pixabay.com/photo/2025/05/23/06/35/sparrow-9617024_1280.jpg' }]}
-        colorMode={colorMode} />
-        <Post content='This is a post!' attachments={[{ url: 'https://cdn.pixabay.com/photo/2025/05/23/06/35/sparrow-9617024_1280.jpg' }]}
-        colorMode={colorMode} />
-        <Post content='This is a post!' attachments={[{ url: 'https://cdn.pixabay.com/photo/2025/05/23/06/35/sparrow-9617024_1280.jpg' }]}
-        colorMode={colorMode} />
-        <Post content='This is a post!' attachments={[{ url: 'https://cdn.pixabay.com/photo/2025/05/23/06/35/sparrow-9617024_1280.jpg' }]}
-        colorMode={colorMode} />
-        <Post content='This is a post!' attachments={[{ url: 'https://cdn.pixabay.com/photo/2025/05/23/06/35/sparrow-9617024_1280.jpg' }]}
-        colorMode={colorMode} />
-        <Post content='This is a post!' attachments={[{ url: 'https://cdn.pixabay.com/photo/2025/05/23/06/35/sparrow-9617024_1280.jpg' }]}
-        colorMode={colorMode} />
-    </ScrollView>
+    <FlatList id='main-window-scroll-view' indicatorStyle={indicatorStyle}
+      data={data}
+      renderItem={Item}
+      keyExtractor={item => item.id.toString()}
+    />
   </View>
 }
 
