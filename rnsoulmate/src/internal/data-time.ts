@@ -39,4 +39,15 @@ function timestampToDateTime(timestamp:number) : string {
   return `${year}-${month}-${day} ${hour}:${minute}:${second}`;
 }
 
-export { nowTime, timestampToDateTime };
+// 获取当前时间 ISO8601格式 YYYYMMDDTHHmmssZ
+function now2YYYYMMDDTHHmmssZ():string {
+  const now = new Date();
+  const isoString = now.toISOString();
+  const formattedTime = isoString
+    .replace(/-/g, '')    // 移除日期中的-
+    .replace(/:/g, '')    // 移除时间中的:
+    .replace(/\.\d{3}/, ''); // 移除.和后面的3位毫秒数
+  return formattedTime;
+}
+
+export { nowTime, timestampToDateTime, now2YYYYMMDDTHHmmssZ };

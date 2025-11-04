@@ -1,3 +1,16 @@
+/* 使用示例
+  const key = config.aes['key-20251027']
+  encryptAES(new Blob(['hello world']), key).then(result => {
+    result.text().then(text => {
+      logger.info(`encrypted text: ${text}`);
+    });
+    decryptAES(result, key).then(result => {
+      result.text().then(text => {
+        logger.info(`decrypted text: ${text}`);
+      });
+    });
+  });
+ */
 import CryptoJS from "crypto-js";
 
 /**
@@ -109,6 +122,5 @@ function wordArrayToArrayBuffer(wordArray: CryptoJS.lib.WordArray): ArrayBuffer 
 
   return buffer;
 }
-
 
 export { encryptAES, decryptAES };
