@@ -14,23 +14,24 @@ interface Item<K, V> {
   value: V;
 }
 
-enum MustHeaderKey {
+enum HeaderKey {
   ContentType = "content-type", // 示例 text/plain
   ContentMD5 = "content-md5", // 示例 ICy5YqxZB1uWSwcVLSNLcA==
   XOssDate = "x-oss-date", // ISO8601标准时间格式 20250328T101048Z
-  XOssContentSha256 = "x-oss-content-sha256" // UNSIGNED-PAYLOAD // 目前只支持UNSIGNED-PAYLOAD
+  XOssContentSha256 = "x-oss-content-sha256", // UNSIGNED-PAYLOAD // 目前只支持UNSIGNED-PAYLOAD
+  Authorization = "Authorization",
 }
 
 const XOssContentSha256Value = "UNSIGNED-PAYLOAD";
 
 interface MustHeader {
-  [MustHeaderKey.ContentType]?: string;
-  [MustHeaderKey.ContentMD5]?: string;
-  [MustHeaderKey.XOssDate]?: string;
-  [MustHeaderKey.XOssContentSha256]?: string;
+  [HeaderKey.ContentType]?: string;
+  [HeaderKey.ContentMD5]?: string;
+  [HeaderKey.XOssDate]?: string;
+  [HeaderKey.XOssContentSha256]?: string;
 }
 
-interface authorizeOptions {
+interface AuthorizeOptions {
   /**
    * method + "\n" +
    * Canonical URI + "\n" +
@@ -75,7 +76,7 @@ interface authorizeOptions {
   accessKeySecret:string
 }
 
-function makeCanonicalRequest(opts: authorizeOptions): string {
+function makeCanonicalRequest(opts: AuthorizeOptions): string {
   // Hashed PayLoad 目前只支持取值为UNSIGNED-PAYLOAD
   const hashedPayload = XOssContentSha256Value;
 
@@ -102,8 +103,8 @@ function makeCanonicalRequest(opts: authorizeOptions): string {
 
   // Canonical Headers
   const canonicalHeaderItems: Item<string, string>[] = [];
-  opts.headers[MustHeaderKey.XOssDate] = opts.date;
-  opts.headers[MustHeaderKey.XOssContentSha256] = hashedPayload;
+  opts.headers[HeaderKey.XOssDate] = opts.date;
+  opts.headers[HeaderKey.XOssContentSha256] = hashedPayload;
   for (const [key, value] of Object.entries(opts.headers)) {
     canonicalHeaderItems.push({
       key: key.toLowerCase(),
@@ -152,7 +153,7 @@ function makeStringToSign(region:string, date:string, canonicalRequest:string): 
   return stringToSign.join('\n');
 }
 
-function authorizationV4(opts: authorizeOptions): string {
+function authorizationV4(opts: AuthorizeOptions): string {
   const product = 'oss';
   const region = opts.region.startsWith('oss-') ? opts.region.substring(4) : opts.region;
 
@@ -215,4 +216,5 @@ const now = now2YYYYMMDDTHHmmssZ();
   logger.info(cr);
 */
 
-export {authorizationV4, MustHeaderKey, Method};
+export {authorizationV4, HeaderKey, Method};
+export type {AuthorizeOptions, MustHeader};

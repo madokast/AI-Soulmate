@@ -8,7 +8,8 @@ import { ReadAttachment } from "../internal/filesystem/current";
 
 import config from "../../config.json";
 import { LoggerFactory } from "../internal/logger/logger";
-import picLoading from "../asserts/images/pic-loading.svg";
+
+import picLoading from "../asserts/images/pic-loading.png";
 
 interface Props {
   attachment: Attachment;
@@ -20,11 +21,7 @@ const logger = LoggerFactory.getLogger("Attachment");
 
 function Attachment(props: Props) {
   const attachment: Attachment = props.attachment;
-  const [imageSource, setImageSource] = useState({
-    uri: picLoading,
-    width: ImageWidth,
-    height: ImageWidth,
-  })
+  const [imageSource, setImageSource] = useState(picLoading)
   useEffect(() => {
     ReadAttachment(attachment.path, attachment.media_type).then((blob) => {
       const reader = new FileReader();
@@ -70,6 +67,8 @@ function resizeImage(width0: number, height0: number) {
 
 const styles = StyleSheet.create({
   container: {
+    width: ImageWidth,
+    height: ImageWidth,
     borderWidth: 2,
     borderRadius: 10,
   },

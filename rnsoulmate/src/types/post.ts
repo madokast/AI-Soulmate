@@ -32,10 +32,13 @@ const ExamplePosts: Array<Post> = [
     id: 4,
     content: "sparrow",
     attachments: [
-      // {
-      //   path: "20251103T173000-test-sparrow.jpg",
-      //   media_type: "image/jpeg",
-      // }
+      {
+        path: "20251103T173000-test-sparrow.jpg1",
+        media_type: "image/jpeg",
+      }, {
+        path: "20251103T173000-test-sparrow.jpg",
+        media_type: "image/jpeg",
+      }
     ],
     created_at: 1762162362941,
   },

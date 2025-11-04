@@ -3,6 +3,7 @@ const {getDefaultConfig, mergeConfig} = require('@react-native/metro-config');
 const fs = require('fs');
 const path = require('path');
 const exclusionList = require('metro-config/src/defaults/exclusionList');
+const { get } = require('http');
 
 const rnwPath = fs.realpathSync(
   path.resolve(require.resolve('react-native-windows/package.json'), '..'),
@@ -42,4 +43,7 @@ const config = {
   },
 };
 
-module.exports = mergeConfig(getDefaultConfig(__dirname), config);
+const defaultConfig = getDefaultConfig(__dirname);
+defaultConfig.resolver.assetExts.push('webp', 'svg');
+
+module.exports = mergeConfig(defaultConfig, config);
