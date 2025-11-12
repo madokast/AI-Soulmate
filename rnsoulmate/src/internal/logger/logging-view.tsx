@@ -6,7 +6,7 @@ import type { LoggingItem } from './logger-factory';
 
 const LoggingView = () => {
     const { height: screenHeight } = Dimensions.get('window');
-    const viewHeight = screenHeight * 0.8 - (StatusBar.currentHeight || 0);
+    const viewHeight = screenHeight * 0.8; // - (StatusBar.currentHeight || 0);
     const [messages, setMessages] = React.useState<Array<LoggingItem>>([]);
 
     const freshMessages = () => {

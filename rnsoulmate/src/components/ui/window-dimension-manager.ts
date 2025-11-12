@@ -16,7 +16,7 @@ class WindowDimensionManager {
   constructor() {
     // 计算顶部安全区域的高度
     if (Platform.OS === OS.Android) {
-      this.paddingTop = StatusBar.currentHeight ?? 0;
+      this.paddingTop = 0 // StatusBar.currentHeight ?? 0;
     }
     if (Platform.OS === OS.Web) {
       document.documentElement.style.overflow = 'hidden';

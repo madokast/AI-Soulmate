@@ -28,7 +28,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'stretch',
     // 为安卓设备添加等于状态栏高度的上边距
-    paddingTop: Platform.OS === OS.Android ? StatusBar.currentHeight : 0
+    paddingTop: 0, //Platform.OS === OS.Android ? StatusBar.currentHeight : 0
   }
 });
 
