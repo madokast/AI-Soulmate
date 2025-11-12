@@ -8,7 +8,7 @@ import { ColorMode } from "./ui/color-mode-manager";
 
 import { Post } from '../types/post';
 import { ExamplePosts } from '../types/post';
-import { Header, HeaderHeight } from './header';
+import { Header } from './header';
 import PostUI from './post';
 import { OS } from '../internal/system';
 
@@ -47,7 +47,6 @@ function MainWindow(props: Props) {
       data={data}
       renderItem={Item}
       keyExtractor={item => item.id.toString()}
-      style={{height:props.height - HeaderHeight}}
     />
   </View>
 }

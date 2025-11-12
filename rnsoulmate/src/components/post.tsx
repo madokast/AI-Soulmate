@@ -48,7 +48,7 @@ const styles = StyleSheet.create({
     borderWidth: 3,
   },
   light: {
-    backgroundColor: 'rgb(230, 230, 230)', // 白色背景，适合浅色模式
+    backgroundColor: 'rgb(210, 210, 210)', // 白色背景，适合浅色模式
     borderColor: 'rgb(255, 255, 255)',
   },
   dark: {
