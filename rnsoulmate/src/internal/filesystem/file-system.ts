@@ -2,6 +2,7 @@
 interface FileStat {
   exists: boolean;
   size: number;
+  mediaType?: string;
 }
 
 interface ReadOptions {

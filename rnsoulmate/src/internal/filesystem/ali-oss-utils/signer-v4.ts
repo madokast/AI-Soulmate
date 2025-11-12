@@ -1,4 +1,7 @@
 import CryptoJS from "crypto-js";
+import { LoggerFactory } from "../../logger/logger";
+
+const logger = LoggerFactory.getLogger("signer-v4");
 
 enum Method {
   PUT = "PUT",
@@ -25,10 +28,10 @@ enum HeaderKey {
 const XOssContentSha256Value = "UNSIGNED-PAYLOAD";
 
 interface MustHeader {
-  [HeaderKey.ContentType]?: string;
-  [HeaderKey.ContentMD5]?: string;
-  [HeaderKey.XOssDate]?: string;
-  [HeaderKey.XOssContentSha256]?: string;
+  [HeaderKey.ContentType]?: string; // 使用者提供
+  [HeaderKey.ContentMD5]?: string; // 使用者提供，可以不必须
+  [HeaderKey.XOssDate]?: string; // 自动填充
+  [HeaderKey.XOssContentSha256]?: string; // 自动填充
 }
 
 interface AuthorizeOptions {
@@ -86,9 +89,10 @@ function makeCanonicalRequest(opts: AuthorizeOptions): string {
   // Canonical Query String
   const canonicalQueries: Item<string, string|null>[] = [];
   if (opts.query) {
-    for (const [key, value] of Object.entries(opts.query)) {
+    for (const [key, value] of opts.query.entries()) {
       const canonicalKey = encodeString(key);
       const canonicalValue = value ? encodeString(value) : null;
+      // logger.info(`canonicalQueryString: ${canonicalKey} = ${canonicalValue}`)
       canonicalQueries.push({
         key: canonicalKey,
         value: canonicalValue,
@@ -100,6 +104,7 @@ function makeCanonicalRequest(opts: AuthorizeOptions): string {
   const canonicalQueryString = canonicalQueries.map(query => {
     return query.value ? `${query.key}=${query.value}` : query.key;
   }).join("&");
+  // logger.info(`canonicalQueryString: ${canonicalQueryString}`);
 
   // Canonical Headers
   const canonicalHeaderItems: Item<string, string>[] = [];
@@ -158,6 +163,7 @@ function authorizationV4(opts: AuthorizeOptions): string {
   const region = opts.region.startsWith('oss-') ? opts.region.substring(4) : opts.region;
 
   const canonicalRequest = makeCanonicalRequest(opts);
+  // logger.info(`canonicalRequest: ${canonicalRequest}`)
   const stringToSign = makeStringToSign(region, opts.date, canonicalRequest);
   const onlyDate = opts.date.split('T')[0];
   const signatureValue = makeSignatureV4(opts.accessKeySecret, onlyDate, region, stringToSign);
