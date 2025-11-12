@@ -112,10 +112,10 @@ async function AppendObject(opts: AppendObjectOptions) {
     region: opts.region,
     bucket: opts.bucket,
     object: opts.object,
-    query: new Map([
-      ["append", null],
-      ["position", opts.offset.toString()]
-    ]),
+    query: {
+      "append": null,
+      "position": opts.offset.toString()
+    },
     headers: headers,
     date: date,
     accessKeyId: opts.accessKeyId,

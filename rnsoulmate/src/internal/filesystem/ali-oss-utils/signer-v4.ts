@@ -54,7 +54,7 @@ interface AuthorizeOptions {
   // 然后用 = 连接 k 和 v，用 & 连接 kv 对
   // 如果只有 k 没有 v，则只有 URI 编码的 k
   // query 为空时，对应空串 ""
-  query?: Map<string, string | null>;
+  query?: { [key: string]: string | null };
 
   /**
    * 签名时参与签名的 headers
@@ -89,7 +89,7 @@ function makeCanonicalRequest(opts: AuthorizeOptions): string {
   // Canonical Query String
   const canonicalQueries: Item<string, string|null>[] = [];
   if (opts.query) {
-    for (const [key, value] of opts.query.entries()) {
+    for (const [key, value] of Object.entries(opts.query)) {
       const canonicalKey = encodeString(key);
       const canonicalValue = value ? encodeString(value) : null;
       // logger.info(`canonicalQueryString: ${canonicalKey} = ${canonicalValue}`)
