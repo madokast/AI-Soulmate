@@ -1,9 +1,10 @@
 import React from "react";
-import { StyleSheet, TextInput, Button, View, Platform, TextInputKeyPressEventData, NativeSyntheticEvent } from "react-native";
+import { StyleSheet, TextInput, Button, View, Platform, TextInputKeyPressEventData, NativeSyntheticEvent, TextInputContentSizeChangeEventData } from "react-native";
 
 import { LoggerFactory } from "../internal/logger/logger";
 
 import { ColorMode } from "./ui/color-mode-manager";
+import { OS } from "../internal/system";
 
 const logger = LoggerFactory.getLogger("header");
 
@@ -13,6 +14,11 @@ interface Props {
 
 function Header(props: Props) {
   const [inputText, setInputText] = React.useState('');
+  const [inputHeight, setInputHeight] = React.useState(0);
+
+  const onContentSizeChange = (event: NativeSyntheticEvent<TextInputContentSizeChangeEventData>) => {
+    setInputHeight(event.nativeEvent.contentSize.height)
+  }
 
   const submit = () => {
     logger.info(`submit: ${inputText}`);
@@ -31,10 +37,21 @@ function Header(props: Props) {
     }
   };
 
+  React.useEffect(() => {
+    // 隐藏滚动条
+    if (Platform.OS === OS.Web) {
+      const scrollView = document.getElementById('header-text-input');
+      if (scrollView) {
+        scrollView.style.overflow = 'auto';
+        scrollView.style.scrollbarWidth = 'none';
+      }
+    }
+  }, []);
+
   return (
     <View style={styles.container}>
-      <TextInput
-        style={[inputStyle.input, inputStyle[props.colorMode]]}
+      <TextInput id="header-text-input"
+        style={[inputStyle.input, inputStyle[props.colorMode], {'height':inputHeight+5}]}
         placeholder=""
         value={inputText}
         onChangeText={setInputText} // 实时更新输入状态
@@ -42,8 +59,8 @@ function Header(props: Props) {
         autoCapitalize="none" // 不自动大写
         autoCorrect={false} // 关闭自动纠错
         multiline={true} // 关键：开启多行模式
-        numberOfLines={3} // 默认显示3行（内容超过会自动滚动）
         onKeyPress={handleKeyPress} // 绑定按键监听
+        onContentSizeChange={onContentSizeChange} 
       />
       <Button
         title="➤"
@@ -73,6 +90,7 @@ const inputStyle = StyleSheet.create({
     borderRadius: 20,
     borderWidth: 3,
     fontSize: 16,
+    textAlignVertical: 'top', // 在Android上，确保文本从顶部开始，而不是垂直居中
   },
   light: {
     backgroundColor: 'rgb(210, 210, 210)', // 白色背景，适合浅色模式
