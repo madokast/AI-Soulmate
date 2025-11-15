@@ -5,8 +5,8 @@ import { ImageSourcePropType } from "react-native";
 import { ColorMode } from "../ui/color-mode-manager";
 
 interface Props {
-  width?:number;
-  height?:number;
+  width:number;
+  height:number;
   borderRadius?:number;
   borderWidth?:number;
   source: ImageSourcePropType;
@@ -15,14 +15,12 @@ interface Props {
   onLongPress?:()=>void;
 }
 
-const ImageWidth = 100;
-
 function CustomImage(props: Props) {
   const style = {
     ...styles.container,
     ...styles[props.colorMode],
-    width: props.width ?? ImageWidth,
-    height: props.height ?? (props.width ?? ImageWidth),
+    width: props.width ,
+    height: props.height,
     borderRadius: props.borderRadius ?? 10,
     borderWidth: props.borderWidth ?? 2,
   }

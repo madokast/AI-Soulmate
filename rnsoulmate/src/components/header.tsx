@@ -6,6 +6,7 @@ import CustomButton from "./base/custom-button";
 
 import { ColorMode } from "./ui/color-mode-manager";
 import { OS } from "../internal/system";
+import ImagePicker from "./base/image-picker";
 
 const logger = LoggerFactory.getLogger("header");
 
@@ -63,6 +64,7 @@ function Header(props: Props) {
         onKeyPress={handleKeyPress} // 绑定按键监听
         onContentSizeChange={onContentSizeChange} 
       />
+      <ImagePicker id="header-image-picker" colorMode={props.colorMode} />
       <CustomButton
         title="C"
         colorMode={props.colorMode}
