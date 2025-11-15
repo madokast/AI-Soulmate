@@ -1,27 +1,31 @@
 import React, { useEffect, useState } from "react";
-import { StyleSheet, View, Image } from "react-native";
-import { ImageURISource } from "react-native";
+import { Image, View } from "react-native";
 
+import CustomImage from "./base/custom-image";
 import type { Attachment } from "../types/post";
 import { ColorMode } from "./ui/color-mode-manager";
 import { ReadAttachment } from "../internal/filesystem/current";
 
-import config from "../../config.json";
 import { LoggerFactory } from "../internal/logger/logger";
 
-import picLoading from "../asserts/images/pic-loading.png";
+import DefaultImage from "./base/default-image-url";
 
 interface Props {
   attachment: Attachment;
   colorMode: ColorMode;
 }
 
-const ImageWidth = config.imageWidth;
+const ImageWidth = 100;
 const logger = LoggerFactory.getLogger("Attachment");
+const defaultImage = {
+  uri: DefaultImage,
+  width: ImageWidth,
+  height: ImageWidth,
+}
 
 function Attachment(props: Props) {
   const attachment: Attachment = props.attachment;
-  const [imageSource, setImageSource] = useState(picLoading)
+  const [imageSource, setImageSource] = useState(defaultImage)
   useEffect(() => {
     ReadAttachment(attachment.path, attachment.media_type).then((blob) => {
       const reader = new FileReader();
@@ -43,8 +47,16 @@ function Attachment(props: Props) {
 
   return (
     <View key={attachment.path}>
-      <Image style={[styles.container, styles[props.colorMode]]} key={attachment.path}
+      {/* <Image style={[styles.container, styles[props.colorMode]]} key={attachment.path}
         source={imageSource}
+      /> */}
+      <CustomImage
+        width={ImageWidth}
+        height={ImageWidth}
+        borderRadius={10}
+        borderWidth={2}
+        source={imageSource}
+        colorMode={props.colorMode}
       />
     </View>
   );
@@ -64,20 +76,5 @@ function resizeImage(width0: number, height0: number) {
   }
   return { width, height };
 }
-
-const styles = StyleSheet.create({
-  container: {
-    width: ImageWidth,
-    height: ImageWidth,
-    borderWidth: 2,
-    borderRadius: 10,
-  },
-  light: {
-    borderColor: 'rgb(230, 230, 230)', // 白色背景，适合浅色模式
-  },
-  dark: {
-    borderColor: 'rgb(30, 30, 30)', // 深灰色背景，适合深色模式
-  },
-})
 
 export default Attachment;
