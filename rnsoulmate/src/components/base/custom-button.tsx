@@ -1,6 +1,5 @@
 import React from 'react';
-import { Pressable, Text, StyleSheet } from 'react-native';
-import { GestureResponderEvent } from 'react-native';
+import { Pressable, StyleSheet } from 'react-native';
 
 import { ColorMode } from '../ui/color-mode-manager';
 import SmallText from './small-text';
@@ -9,10 +8,29 @@ interface Props {
   onPress: () => void;
   title: string;
   colorMode: ColorMode;
+  width?:number;
+  height?:number;
+  borderRadius?:number;
+  paddingBottom?:number;
+  paddingTop?:number;
+  paddingLeft?:number;
+  paddingRight?:number;
 }
 
 function CustomButton(props: Props) {
-  const style = {...styles.button, ...styles[props.colorMode]};
+  const style = {
+    ...styles.button, 
+    ...styles[props.colorMode],
+    width: props.width ?? 32,
+    height: props.height ?? 32,
+    borderRadius: props.borderRadius ?? 12,
+    paddingBottom: props.paddingBottom ?? 2,
+    paddingTop: props.paddingTop ?? 1,
+    paddingLeft: props.paddingLeft ?? 1,
+    paddingRight: props.paddingRight ?? 2,
+    alignItems: 'center',
+    justifyContent: 'center',
+  };
   const [isActive, setActive] = React.useState(false);
 
   // 按下事件
@@ -30,6 +48,7 @@ function CustomButton(props: Props) {
     }
   }
 
+
   return (
     <Pressable
       onPressIn={pressIn}
@@ -46,16 +65,11 @@ function CustomButton(props: Props) {
 
 const styles = StyleSheet.create({
   button: {
-    paddingTop: 4,
-    paddingBottom: 6,
-    paddingLeft: 10,
-    paddingRight: 12,
-    borderRadius: 12,
     alignItems: 'center',
     justifyContent: 'center',
   },
   [ColorMode.Light]: {
-    backgroundColor: 'rgb(11, 136, 213)',
+    backgroundColor: 'rgba(85, 175, 232, 1)',
   },
   [ColorMode.Dark]: {
     backgroundColor: 'rgb(11, 136, 213)',
