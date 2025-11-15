@@ -5,13 +5,15 @@ import { ColorMode } from "../ui/color-mode-manager";
 interface Props {
   text: string;
   colorMode: ColorMode;
+  selectable?: boolean;
 }
 
 function SmallText(props: Props){
     const colorMode = props.colorMode;
     const text = props.text;
+    const selectable = props.selectable ?? false;
     return (
-        <Text style={[styles.mainText, styles[colorMode]]}>{text}</Text>
+        <Text selectable={selectable} style={[styles.mainText, styles[colorMode]]}>{text}</Text>
     );
 }
 

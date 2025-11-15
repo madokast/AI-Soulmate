@@ -1,7 +1,8 @@
 import React from "react";
-import { StyleSheet, TextInput, Button, View, Platform, TextInputKeyPressEventData, NativeSyntheticEvent, TextInputContentSizeChangeEventData } from "react-native";
+import { StyleSheet, TextInput, View, Platform, TextInputKeyPressEventData, NativeSyntheticEvent, TextInputContentSizeChangeEventData } from "react-native";
 
 import { LoggerFactory } from "../internal/logger/logger";
+import CustomButton from "./base/custom-button";
 
 import { ColorMode } from "./ui/color-mode-manager";
 import { OS } from "../internal/system";
@@ -62,11 +63,10 @@ function Header(props: Props) {
         onKeyPress={handleKeyPress} // 绑定按键监听
         onContentSizeChange={onContentSizeChange} 
       />
-      <Button
-        title="➤"
-        color={buttonStyle[props.colorMode].color}
+      <CustomButton
+        title="C"
+        colorMode={props.colorMode}
         onPress={submit} // 点击时传递输入内容
-        disabled={!inputText.trim()} // 当输入为空时禁用按钮
       />
     </View>
   );
@@ -103,14 +103,5 @@ const inputStyle = StyleSheet.create({
     color: "rgb(200, 200, 200)",
   },
 });
-
-const buttonStyle = {
-  light: {
-    color: 'rgb(210, 210, 210)'
-  },
-  dark: {
-    color: 'rgb(30, 30, 30)'
-  }
-}
 
 export { Header };
