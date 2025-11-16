@@ -5,12 +5,15 @@ import { View } from 'react-native';
 import { ColorMode } from '../ui/color-mode-manager';
 import { LoggerFactory } from '../../internal/logger/logger';
 import CustomImage from './custom-image';
+import SmallText from './small-text';
+
 import DefaultImage from './default-image-url';
 const logger = LoggerFactory.getLogger('ImagePicker');
 
 interface Props {
   id:string,
   colorMode: ColorMode;
+  picked:(uri:string|null)=>void;
 }
 
 const ImageWidth = 100;
@@ -18,7 +21,12 @@ const ImageWidth = 100;
 function ImagePicker(props:Props) {
   const id = `image-picker-${props.id}`
   const inputId = `${id}-input`
-  const [imageUri, setImageUri] = React.useState<string>(DefaultImage);
+  const [imageUri, setImageUri0] = React.useState<string>(DefaultImage);
+
+  const setImageUri = (uri:string|null) => {
+    setImageUri0(uri ?? DefaultImage);
+    props.picked(uri); // 通知父组件图片已选择
+  }
 
   React.useEffect(() => {
     const imagePicker = document.getElementById(id);
@@ -77,9 +85,10 @@ function ImagePicker(props:Props) {
         height={ImageWidth}
         source={source}
         onPress={pick}
-        onLongPress={()=>setImageUri(DefaultImage)}
+        onLongPress={()=>setImageUri(null)}
         colorMode={props.colorMode}
       />
+      
     </View>
   )
 }

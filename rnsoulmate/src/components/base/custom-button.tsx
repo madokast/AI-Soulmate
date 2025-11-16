@@ -1,5 +1,5 @@
 import React from 'react';
-import { Pressable, StyleSheet } from 'react-native';
+import { DimensionValue, Pressable, StyleSheet } from 'react-native';
 
 import { ColorMode } from '../ui/color-mode-manager';
 import SmallText from './small-text';
@@ -8,7 +8,7 @@ interface Props {
   onPress: () => void;
   title: string;
   colorMode: ColorMode;
-  width?:number;
+  width?:DimensionValue;
   height?:number;
   borderRadius?:number;
   paddingBottom?:number;

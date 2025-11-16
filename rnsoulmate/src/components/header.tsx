@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, TextInput, View, Platform, TextInputKeyPressEventData, NativeSyntheticEvent, TextInputContentSizeChangeEventData } from "react-native";
+import { StyleSheet, TextInput, View, Platform, TextInputKeyPressEventData, NativeSyntheticEvent, TextInputContentSizeChangeEventData, Dimensions, DimensionValue } from "react-native";
 
 import { LoggerFactory } from "../internal/logger/logger";
 import CustomButton from "./base/custom-button";
@@ -12,7 +12,10 @@ const logger = LoggerFactory.getLogger("header");
 
 interface Props {
   colorMode: ColorMode;
+  width:number;
 }
+
+const buttonWidth = 32;
 
 function Header(props: Props) {
   const [inputText, setInputText] = React.useState('');
@@ -25,6 +28,7 @@ function Header(props: Props) {
   const submit = () => {
     logger.info(`submit: ${inputText}`);
     setInputText("");
+    setInputHeight(0);
   }
 
  // 监听键盘按键，处理 Ctrl+Enter 组合键
@@ -50,10 +54,20 @@ function Header(props: Props) {
     }
   }, []);
 
+  
+  const inputWidthRatio = Math.floor((props.width - buttonWidth*1.5) * 100 / props.width);
+  const inputWidth:DimensionValue = `${inputWidthRatio}%`
+  logger.trace(`inputWidth: ${inputWidth}, props.width: ${props.width}`);
+  const inputStyles = {
+    ...inputStyle.input, 
+    ...inputStyle[props.colorMode], 
+    ...{'height':inputHeight+5, 'width':inputWidth},
+  }
+
   return (
     <View style={styles.container}>
       <TextInput id="header-text-input"
-        style={[inputStyle.input, inputStyle[props.colorMode], {'height':inputHeight+5}]}
+        style={inputStyles}
         placeholder=""
         value={inputText}
         onChangeText={setInputText} // 实时更新输入状态
@@ -64,11 +78,12 @@ function Header(props: Props) {
         onKeyPress={handleKeyPress} // 绑定按键监听
         onContentSizeChange={onContentSizeChange} 
       />
-      <ImagePicker id="header-image-picker" colorMode={props.colorMode} />
+      {/* <ImagePicker id="header-image-picker" colorMode={props.colorMode} /> */}
       <CustomButton
         title="C"
         colorMode={props.colorMode}
         onPress={submit} // 点击时传递输入内容
+        width={buttonWidth}
       />
     </View>
   );
@@ -87,7 +102,6 @@ const styles = StyleSheet.create({
 
 const inputStyle = StyleSheet.create({
   input: {
-    width: "100%",
     padding: 5,
     borderRadius: 20,
     borderWidth: 3,

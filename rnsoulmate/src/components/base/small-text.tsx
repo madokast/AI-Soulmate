@@ -1,11 +1,12 @@
 
-import { StyleSheet, Text } from "react-native";
+import { StyleProp, StyleSheet, Text, TextStyle } from "react-native";
 import { ColorMode } from "../ui/color-mode-manager";
 
 interface Props {
   text: string;
   colorMode: ColorMode;
   selectable?: boolean;
+  styles?: StyleProp<TextStyle>;
 }
 
 function SmallText(props: Props){
@@ -13,7 +14,7 @@ function SmallText(props: Props){
     const text = props.text;
     const selectable = props.selectable ?? false;
     return (
-        <Text selectable={selectable} style={[styles.mainText, styles[colorMode]]}>{text}</Text>
+        <Text selectable={selectable} style={[styles.mainText, styles[colorMode], props.styles]}>{text}</Text>
     );
 }
 

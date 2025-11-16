@@ -76,6 +76,9 @@ class Logger {
     const formattedMessage = `[${this.name}] ${message}`;
     this.logger[level](formattedMessage, ...optionalParams);
   }
+  trace(message: string, ...optionalParams: any[]) {
+    ; // 不记录 trace 日志
+  }
   debug(message: string, ...optionalParams: any[]) {
     this.log('debug', message, ...optionalParams);
   }

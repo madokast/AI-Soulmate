@@ -5,6 +5,7 @@ import { View, StyleSheet, FlatList, Platform } from 'react-native';
 import { ListRenderItemInfo } from 'react-native';
 
 import { ColorMode } from "./ui/color-mode-manager";
+import { LoggerFactory } from '../internal/logger/logger';
 
 import { Post } from '../types/post';
 import { ExamplePosts } from '../types/post';
@@ -12,6 +13,7 @@ import { Header } from './header';
 import PostUI from './post';
 import { OS } from '../internal/system';
 
+const logger = LoggerFactory.getLogger('MainWindow');
 
 interface Props {
   colorMode: ColorMode;
@@ -41,8 +43,9 @@ function MainWindow(props: Props) {
     return <PostUI post={item} colorMode={colorMode} />
   };
 
+  logger.trace(`height: ${props.height}, width: ${props.width}`);
   return <View style={[styles.body, styles[colorMode], {height: props.height, width: props.width}]}>
-    <Header colorMode={colorMode}/>
+    <Header colorMode={colorMode} width={props.width} />
     <FlatList id='main-window-scroll-view' indicatorStyle={indicatorStyle}
       data={data}
       renderItem={Item}

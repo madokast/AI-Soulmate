@@ -1,9 +1,10 @@
-import { SafeAreaView, StyleSheet } from 'react-native';
+import { Platform, SafeAreaView, StatusBar, StyleSheet } from 'react-native';
 
 import MainWindow from './src/components/main-window';
 import { ColorModeManager } from './src/components/ui/color-mode-manager';
 import { WindowDimensionManager } from './src/components/ui/window-dimension-manager';
 import { LoggerFactory } from './src/internal/logger/logger';
+import { OS } from './src/internal/system';
 
 const logger = LoggerFactory.getLogger('App');
 
@@ -13,11 +14,10 @@ const colorModeManager = new ColorModeManager();
 const windowDimensionManager = new WindowDimensionManager();
 
 const App = () => {
-  logger.info('App start');
-
   const colorMode = colorModeManager.useValue();
   const windowDimension = windowDimensionManager.useValue();
 
+  logger.trace(`windowDimension: ${JSON.stringify(windowDimension)}`);
   return (
     <SafeAreaView style={styles.body}>
         <MainWindow colorMode={colorMode} height={windowDimension.height} width={windowDimension.width} />
@@ -30,8 +30,10 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'stretch',
     // 为安卓设备添加等于状态栏高度的上边距
-    paddingTop: 0, //Platform.OS === OS.Android ? StatusBar.currentHeight : 0
+    paddingTop: Platform.OS === OS.Android ? StatusBar.currentHeight : 0
   }
 });
+
+logger.info('App start');
 
 export default App;

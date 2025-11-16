@@ -12,12 +12,18 @@ const logger = LoggerFactory.getLogger('ImagePicker');
 interface Props {
   id:string,
   colorMode: ColorMode;
+  picked?:(uri:string|null)=>void;
 }
 
 const ImageWidth = 100;
 
 function ImagePicker(props:Props) {
-  const [imageUri, setImageUri] = React.useState<string>(DefaultImage);
+  const [imageUri, setImageUri0] = React.useState<string>(DefaultImage);
+
+  const setImageUri = (uri:string|null) => {
+    setImageUri0(uri ?? DefaultImage);
+    props.picked?.(uri); // 通知父组件图片已选择
+  }
 
   // select an image
   const pick = () => {
@@ -54,7 +60,7 @@ function ImagePicker(props:Props) {
         height={ImageWidth}
         source={source}
         onPress={pick}
-        onLongPress={()=>setImageUri(DefaultImage)}
+        onLongPress={()=>setImageUri(null)}
         colorMode={props.colorMode}
       />
     </View>
