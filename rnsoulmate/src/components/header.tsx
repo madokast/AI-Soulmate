@@ -20,15 +20,17 @@ const buttonWidth = 32;
 function Header(props: Props) {
   const [inputText, setInputText] = React.useState('');
   const [inputHeight, setInputHeight] = React.useState(0);
+  const [mediaInputShow, setMediaInputShow] = React.useState(false); // 控制图片选择器显示
 
   const onContentSizeChange = (event: NativeSyntheticEvent<TextInputContentSizeChangeEventData>) => {
     setInputHeight(event.nativeEvent.contentSize.height)
   }
 
+  const switchMediaInputShow = () => setMediaInputShow(!mediaInputShow);
+
   const submit = () => {
     logger.info(`submit: ${inputText}`);
     setInputText("");
-    setInputHeight(0);
   }
 
  // 监听键盘按键，处理 Ctrl+Enter 组合键
@@ -65,32 +67,36 @@ function Header(props: Props) {
   }
 
   return (
-    <View style={styles.container}>
-      <TextInput id="header-text-input"
-        style={inputStyles}
-        placeholder=""
-        value={inputText}
-        onChangeText={setInputText} // 实时更新输入状态
-        keyboardType="default" // 默认键盘类型
-        autoCapitalize="none" // 不自动大写
-        autoCorrect={false} // 关闭自动纠错
-        multiline={true} // 关键：开启多行模式
-        onKeyPress={handleKeyPress} // 绑定按键监听
-        onContentSizeChange={onContentSizeChange} 
-      />
-      {/* <ImagePicker id="header-image-picker" colorMode={props.colorMode} /> */}
-      <CustomButton
-        title="C"
-        colorMode={props.colorMode}
-        onPress={submit} // 点击时传递输入内容
-        width={buttonWidth}
-      />
+    <View>
+      {/* 文本输入和提交按钮 */}
+      <View style={textInputting.container}>
+        <TextInput id="header-text-input"
+          style={inputStyles}
+          placeholder=""
+          value={inputText}
+          onChangeText={setInputText} // 实时更新输入状态
+          keyboardType="default" // 默认键盘类型
+          autoCapitalize="none" // 不自动大写
+          autoCorrect={false} // 关闭自动纠错
+          multiline={true} // 关键：开启多行模式
+          onKeyPress={handleKeyPress} // 绑定按键监听
+          onContentSizeChange={onContentSizeChange} 
+        />
+        <CustomButton
+          title="C"
+          colorMode={props.colorMode}
+          onPress={submit} // 点击时传递输入内容
+          onLongPress={switchMediaInputShow} // 点击时切换图片选择器显示
+          width={buttonWidth}
+          />
+      </View>
+      {mediaInputShow && <ImagePicker id="header-image-picker" colorMode={props.colorMode} />}
     </View>
   );
 }
 
 
-const styles = StyleSheet.create({
+const textInputting = StyleSheet.create({
   container: {
     flexDirection: 'row', // 关键：设置为水平排列
     padding: 5, // 整体内边距

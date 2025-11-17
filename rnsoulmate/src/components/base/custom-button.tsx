@@ -6,6 +6,7 @@ import SmallText from './small-text';
 
 interface Props {
   onPress: () => void;
+  onLongPress?: () => void;
   title: string;
   colorMode: ColorMode;
   width?:DimensionValue;
@@ -32,6 +33,7 @@ function CustomButton(props: Props) {
     justifyContent: 'center',
   };
   const [isActive, setActive] = React.useState(false);
+  const [isLongPress, setIsLongPress] = React.useState(false);
 
   // 按下事件
   const pressIn = () => {
@@ -40,11 +42,19 @@ function CustomButton(props: Props) {
   
   // 松开事件
   const pressOut = () => {
-    setActive(true);
     try {
-      props.onPress();
+      if (!isLongPress) {
+        props.onPress(); // 只有在长按事件未触发时才调用 onPress 事件
+      }
     } finally {
       setActive(false);
+    }
+  }
+
+  const onLongPress = () => {
+    if (props.onLongPress) {
+      setIsLongPress(true);
+      props.onLongPress();
     }
   }
 
@@ -53,6 +63,7 @@ function CustomButton(props: Props) {
     <Pressable
       onPressIn={pressIn}
       onPressOut={pressOut}
+      onLongPress={onLongPress}
       style={[
         style,
         isActive && buttonPressedStyles[props.colorMode], // 按下时的样式

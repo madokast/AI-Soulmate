@@ -1,3 +1,5 @@
+import React from "react";
+
 import { StyleSheet, Image, Pressable } from "react-native";
 
 import { ImageSourcePropType } from "react-native";
@@ -16,6 +18,22 @@ interface Props {
 }
 
 function CustomImage(props: Props) {
+  const [isLongPress, setIsLongPress] = React.useState<boolean>(false);
+
+  const onLongPress = () => {
+    if (props.onLongPress) {
+      setIsLongPress(true);
+      props.onLongPress();
+    }
+  }
+
+  const onPress = () => {
+    if (props.onPress && !isLongPress) {
+      props.onPress();
+    }
+    setIsLongPress(false);
+  }
+
   const style = {
     ...styles.container,
     ...styles[props.colorMode],
@@ -26,7 +44,7 @@ function CustomImage(props: Props) {
   }
 
   return (
-    <Pressable style={style} onPress={props.onPress} onLongPress={props.onLongPress}>
+    <Pressable style={style} onPress={onPress} onLongPress={onLongPress}>
       <Image style={style} source={props.source}/>
     </Pressable>
   );
