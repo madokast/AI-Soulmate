@@ -48,6 +48,7 @@ function CustomButton(props: Props) {
       }
     } finally {
       setActive(false);
+      setIsLongPress(false);
     }
   }
 

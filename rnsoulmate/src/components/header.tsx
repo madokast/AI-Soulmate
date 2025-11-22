@@ -3,16 +3,21 @@ import { StyleSheet, TextInput, View, Platform, TextInputKeyPressEventData, Nati
 
 import { LoggerFactory } from "../internal/logger/logger";
 import CustomButton from "./base/custom-button";
+import postService from '../services/post-service';
+import attachmentService from "../services/attachment-service";
 
 import { ColorMode } from "./ui/color-mode-manager";
 import { OS } from "../internal/system";
 import ImagePicker from "./base/image-picker";
+import Attachment from "../types/attachment";
+import Media from "../types/media";
 
 const logger = LoggerFactory.getLogger("header");
 
 interface Props {
   colorMode: ColorMode;
   width:number;
+  afterPost: () => Promise<unknown>;
 }
 
 const buttonWidth = 32;
@@ -20,7 +25,8 @@ const buttonWidth = 32;
 function Header(props: Props) {
   const [inputText, setInputText] = React.useState('');
   const [inputHeight, setInputHeight] = React.useState(0);
-  const [mediaInputShow, setMediaInputShow] = React.useState(false); // 控制图片选择器显示
+  const [mediaInputShow, setMediaInputShow] = React.useState(false); // 控制媒体选择器显示
+  const [pickedMedia, setPickedMedia] = React.useState<Media|null>(null); // 已选择的媒体
 
   const onContentSizeChange = (event: NativeSyntheticEvent<TextInputContentSizeChangeEventData>) => {
     setInputHeight(event.nativeEvent.contentSize.height)
@@ -30,7 +36,19 @@ function Header(props: Props) {
 
   const submit = () => {
     logger.info(`submit: ${inputText}`);
-    setInputText("");
+    const content = inputText.trim();
+    if (content.length > 0) {
+      const medias:Media[] = []
+      if (pickedMedia) {
+        medias.push(pickedMedia);
+        logger.info(`pickedMedia: ${pickedMedia.name}`)
+      }
+      doPost(content, medias, false).then(()=>{
+        props.afterPost()
+          .then(() => setInputText(''))
+          .catch(error => logger.error("Failed to post.", error));
+      })
+    }
   }
 
  // 监听键盘按键，处理 Ctrl+Enter 组合键
@@ -90,9 +108,23 @@ function Header(props: Props) {
           width={buttonWidth}
           />
       </View>
-      {mediaInputShow && <ImagePicker id="header-image-picker" colorMode={props.colorMode} />}
+      {mediaInputShow && (
+        <ImagePicker 
+          id="header-image-picker" 
+          colorMode={props.colorMode}
+          picked={setPickedMedia}
+        />)}
     </View>
   );
+}
+
+async function doPost(content:string, medias:Media[], encrypt:boolean) {
+  const attachments:Attachment[] = []
+  for (const media of medias) {
+    const attachment = await attachmentService.Post(media, encrypt)
+    attachments.push(attachment)
+  }
+  await postService.Post(content, attachments, encrypt)
 }
 
 

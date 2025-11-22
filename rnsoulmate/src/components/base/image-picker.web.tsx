@@ -5,6 +5,7 @@ import { ColorMode } from '../ui/color-mode-manager';
 import { LoggerFactory } from '../../internal/logger/logger';
 import CustomImage from './custom-image';
 import SmallText from './small-text';
+import Media from '../../types/media';
 
 import DefaultImage from './default-image-url';
 const logger = LoggerFactory.getLogger('ImagePicker');
@@ -12,7 +13,7 @@ const logger = LoggerFactory.getLogger('ImagePicker');
 interface Props {
   id:string,
   colorMode: ColorMode;
-  picked?:(uri:string|null)=>void;
+  picked?:(uri:Media|null)=>void;
 }
 
 const ImageWidth = 100;
@@ -23,10 +24,11 @@ function ImagePicker(props:Props) {
   const [imageUri, setImageUri0] = React.useState<string>(DefaultImage);
   const [imageSize, setImageSize] = React.useState<number>(0);
 
-  const setImageUri = (uri:string|null) => {
+  const setImageUri = (media:Media|null) => {
+    const uri = media?.dataUrl;
     setImageUri0(uri ?? DefaultImage);
     setImageSize(uri ? uri.length : 0);
-    props.picked?.(uri); // 通知父组件图片已选择
+    props.picked?.(media); // 通知父组件图片已选择
   }
 
   React.useEffect(() => {
@@ -46,7 +48,12 @@ function ImagePicker(props:Props) {
           const reader = new FileReader();
           reader.onloadend = () => {
             logger.info(`read image: ${file.name}`);
-            setImageUri(reader.result as string);
+            const dataURL = reader.result as string;
+            setImageUri({
+              name: file.name,
+              blob: urltoBlob(dataURL),
+              dataUrl: dataURL,
+            });
           };
           reader.readAsDataURL(file);
         }
@@ -106,6 +113,11 @@ function ImagePicker(props:Props) {
       />
     </View>
   )
+}
+
+async function urltoBlob(url: string): Promise<Blob> {
+  const res = await fetch(url)
+  return res.blob()
 }
 
 const styles = StyleSheet.create({

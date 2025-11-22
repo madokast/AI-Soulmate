@@ -7,7 +7,8 @@ import Attachment from "./attachment";
 
 import { timestampToDateTime } from "../internal/data-time";
 import { ColorMode } from "./ui/color-mode-manager";
-import { Post as PostType, Attachment as AttachmentType } from "../types/post";
+import PostType from "../types/post";
+import AttachmentType from "../types/attachment";
 
 interface Props {
   post: PostType

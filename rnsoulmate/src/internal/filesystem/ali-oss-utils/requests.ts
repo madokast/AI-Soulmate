@@ -61,7 +61,13 @@ async function GetObject(opts:GetObjectOptions):Promise<Blob> {
       [HeaderKey.XOssDate]: date,
     }
   });
-  return await response.blob();
+  if (!response.ok) {
+    const message = `${method} ${url} ${response.status} ${response.statusText}`
+    throw new Error(message);
+  }
+  const contentType = response.headers.get(HeaderKey.ContentType) || defaultContentType;
+  const arrayBuffer = await response.arrayBuffer();
+  return new Blob([arrayBuffer], { type: contentType });
 }
 
 async function PutObject(opts: PutObjectOptions):Promise<void> {
@@ -168,7 +174,8 @@ async function HeadObject(opts:HeadObjectOptions): Promise<Headers> {
     }
   });
   if (!response.ok) {
-    throw new Error(`HTTP ${response.status} ${response.statusText}`);
+    const message = `${method} ${url} ${response.status} ${response.statusText}`
+    throw new Error(message);
   }
 
   // Content-Length, Content-Type
