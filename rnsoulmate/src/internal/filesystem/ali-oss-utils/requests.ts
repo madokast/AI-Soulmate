@@ -2,6 +2,7 @@ import { now2YYYYMMDDTHHmmssZ } from "../../data-time";
 import { authorizationV4, Method, HeaderKey } from "./signer-v4";
 import { AuthorizeOptions, MustHeader } from "./signer-v4";
 import { LoggerFactory } from "../../logger/logger";
+import readStream2buffer from "./readable-stream-tool";
 
 const logger = LoggerFactory.getLogger("requests");
 
@@ -66,8 +67,12 @@ async function GetObject(opts:GetObjectOptions):Promise<Blob> {
     throw new Error(message);
   }
   const contentType = response.headers.get(HeaderKey.ContentType) || defaultContentType;
-  const arrayBuffer = await response.arrayBuffer();
-  return new Blob([arrayBuffer], { type: contentType });
+  const bolbParts:ArrayBuffer[] = []
+  if (response.body) {
+    const buffer = await readStream2buffer(response.body);
+    bolbParts.push(buffer);
+  }
+  return new Blob(bolbParts, { type: contentType });
 }
 
 async function PutObject(opts: PutObjectOptions):Promise<void> {
@@ -181,6 +186,7 @@ async function HeadObject(opts:HeadObjectOptions): Promise<Headers> {
   // Content-Length, Content-Type
   return response.headers;
 }
+
 
 
 export {GetObject, PutObject, AppendObject, HeadObject};
