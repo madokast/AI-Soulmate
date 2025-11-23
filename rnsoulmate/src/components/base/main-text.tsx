@@ -21,7 +21,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
   },
   light: {
-    "color": "rgb(20, 20, 20)"
+    "color": "rgb(48, 48, 48)"
   },
   dark: {
     "color": "rgb(200, 200, 200)"

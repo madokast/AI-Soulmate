@@ -145,11 +145,11 @@ const inputStyle = StyleSheet.create({
   light: {
     backgroundColor: 'rgb(210, 210, 210)', // 白色背景，适合浅色模式
     borderColor: 'rgb(255, 255, 255)',
-    color: "rgb(20, 20, 20)",
+    color: "rgb(48, 48, 48)",
   },
   dark: {
-    backgroundColor: 'rgb(30, 30, 30)', // 深灰色背景，适合深色模式
-    borderColor: 'rgb(20, 20, 20)',
+    backgroundColor: 'rgb(50, 50, 50)', // 深灰色背景，适合深色模式
+    borderColor: 'rgb(48, 48, 48)',
     color: "rgb(200, 200, 200)",
   },
 });

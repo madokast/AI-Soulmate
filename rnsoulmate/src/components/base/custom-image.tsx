@@ -59,7 +59,7 @@ const styles = StyleSheet.create({
     borderColor: 'rgb(230, 230, 230)', // 白色背景，适合浅色模式
   },
   [ColorMode.Dark]: {
-    borderColor: 'rgb(30, 30, 30)', // 深灰色背景，适合深色模式
+    borderColor: 'rgb(50, 50, 50)', // 深灰色背景，适合深色模式
   },
 })
 

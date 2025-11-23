@@ -1,0 +1,8 @@
+<resources>
+    <style name="AppTheme" parent="Theme.AppCompat.DayNight.NoActionBar">
+        <!-- 这里设置深色模式下的状态栏颜色，例如黑色 -->
+        <item name="android:statusBarColor">#141414</item>
+        <!-- 深色模式下，不需要 LightStatusBar，文字会自动变白 -->
+        <item name="android:windowLightStatusBar">false</item>
+    </style>
+</resources>

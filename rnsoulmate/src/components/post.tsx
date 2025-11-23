@@ -66,8 +66,8 @@ const styles = StyleSheet.create({
     borderColor: 'rgb(255, 255, 255)',
   },
   dark: {
-    backgroundColor: 'rgb(30, 30, 30)', // 深灰色背景，适合深色模式
-    borderColor: 'rgb(20, 20, 20)',
+    backgroundColor: 'rgb(50, 50, 50)', // 深灰色背景，适合深色模式
+    borderColor: 'rgb(48, 48, 48)',
   },
 });
 

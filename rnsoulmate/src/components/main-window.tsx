@@ -73,7 +73,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgb(255, 255, 255)', // 白色背景，适合浅色模式
   },
   dark: {
-    backgroundColor: 'rgb(20, 20, 20)', // 深灰色背景，适合深色模式
+    backgroundColor: 'rgb(48, 48, 48)', // 深灰色背景，适合深色模式
   }
 });
 
