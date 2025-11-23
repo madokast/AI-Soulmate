@@ -1,17 +1,18 @@
 
-import { StyleSheet, Text } from "react-native";
+import { StyleProp, StyleSheet, Text, TextStyle } from "react-native";
 import { ColorMode } from "../ui/color-mode-manager";
 
 interface Props {
   text: string;
   colorMode: ColorMode;
+  styles?: StyleProp<TextStyle>;
 }
 
 function MainText(props: Props) {
     const colorMode = props.colorMode;
     const text = props.text;
     return (
-        <Text style={[styles.mainText, styles[colorMode]]}>{text}</Text>
+        <Text style={[styles.mainText, styles[colorMode], props.styles]}>{text}</Text>
     );
 }
 

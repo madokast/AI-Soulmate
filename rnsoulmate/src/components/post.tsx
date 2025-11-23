@@ -3,31 +3,40 @@ import { StyleSheet, View } from "react-native";
 
 import MainText from "./base/main-text";
 import SmallText from "./base/small-text";
-import Attachment from "./attachment";
+import Attachment, {AttachmentWidth} from "./attachment";
+import { LoggerFactory } from '../internal/logger/logger';
 
 import { timestampToDateTime } from "../internal/data-time";
 import { ColorMode } from "./ui/color-mode-manager";
 import PostType from "../types/post";
 import AttachmentType from "../types/attachment";
 
+const logger = LoggerFactory.getLogger('Post');
+
 interface Props {
   post: PostType
   colorMode: ColorMode;
+  width: number;
 }
 
 function Post(props: Props) {
   const post = props.post;
   const time = timestampToDateTime(post.created_at);
   const id = post.id;
+
+  const attachmentViews = attachmentView(post.attachments, props.colorMode);
+  const attachmentWidth = attachmentViews.length * AttachmentWidth;
+
+  logger.trace(`width: ${props.width}`);
   return (
     <View style={[styles.container, styles[props.colorMode]]}>
-      <View style={{ flexDirection: 'row', alignItems: 'flex-start' }}>
-        <View style={{ flex: 1 }}>
-          <MainText text={post.content} colorMode={props.colorMode} />
-        </View>
-        {attachmentView(post.attachments, props.colorMode)}
+      <View style={{width: props.width - attachmentWidth}}>
+        <MainText text={post.content} colorMode={props.colorMode} />
+        <SmallText text={`${time} #${id}`} colorMode={props.colorMode} />
       </View>
-      <SmallText text={`${time} #${id}`} colorMode={props.colorMode} />
+      <View>
+        {attachmentViews}
+      </View>
     </View>
   );
 }
@@ -42,8 +51,9 @@ function attachmentView(items: AttachmentType[] | undefined, colorMode: ColorMod
 
 const styles = StyleSheet.create({
   container: {
+    flexDirection: 'row',
     alignItems: "flex-start",
-    justifyContent: "center",
+    justifyContent: "space-between",
     padding: 5,
     borderRadius: 20,
     borderWidth: 3,

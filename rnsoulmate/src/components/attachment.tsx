@@ -48,9 +48,6 @@ function Attachment(props: Props) {
 
   return (
     <View key={attachment.path}>
-      {/* <Image style={[styles.container, styles[props.colorMode]]} key={attachment.path}
-        source={imageSource}
-      /> */}
       <CustomImage
         width={ImageWidth}
         height={ImageWidth}
@@ -79,3 +76,4 @@ function resizeImage(width0: number, height0: number) {
 }
 
 export default Attachment;
+export {ImageWidth as AttachmentWidth};

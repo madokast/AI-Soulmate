@@ -48,7 +48,7 @@ function MainWindow(props: Props) {
 
   const Item = (itemInfo: ListRenderItemInfo<Post>) => {
     const item = itemInfo.item;
-    return <PostUI post={item} colorMode={colorMode} />
+    return <PostUI post={item} colorMode={colorMode} width={props.width} />
   };
 
   logger.trace(`height: ${props.height}, width: ${props.width}`);
