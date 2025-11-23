@@ -3,7 +3,7 @@ import { StyleSheet, View } from "react-native";
 
 import MainText from "./base/main-text";
 import SmallText from "./base/small-text";
-import Attachment, {AttachmentWidth} from "./attachment";
+import Attachment, { AttachmentWidth } from "./attachment";
 import { LoggerFactory } from '../internal/logger/logger';
 
 import { timestampToDateTime } from "../internal/data-time";
@@ -30,7 +30,10 @@ function Post(props: Props) {
   logger.trace(`width: ${props.width}`);
   return (
     <View style={[styles.container, styles[props.colorMode]]}>
-      <View style={{width: props.width - attachmentWidth}}>
+      <View style={{
+        width: props.width - attachmentWidth,
+        flex: 1,
+      }}>
         <MainText text={post.content} colorMode={props.colorMode} />
         <SmallText text={`${time} #${id}`} colorMode={props.colorMode} />
       </View>
