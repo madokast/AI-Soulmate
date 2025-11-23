@@ -17,7 +17,7 @@ const logger = LoggerFactory.getLogger("header");
 interface Props {
   colorMode: ColorMode;
   width:number;
-  afterPost: () => Promise<unknown>;
+  afterPost: () => unknown;
 }
 
 const buttonWidth = 32;
@@ -43,11 +43,7 @@ function Header(props: Props) {
         medias.push(pickedMedia);
         logger.info(`pickedMedia: ${pickedMedia.name}`)
       }
-      doPost(content, medias, false).then(()=>{
-        props.afterPost()
-          .then(() => setInputText(''))
-          .catch(error => logger.error("Failed to post.", error));
-      })
+      doPost(content, medias, false).then(props.afterPost);
     }
   }
 

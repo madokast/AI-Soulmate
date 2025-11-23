@@ -26,11 +26,12 @@ function MainWindow(props: Props) {
   const indicatorStyle = colorMode === ColorMode.Dark ? 'white' : 'black';
   
   const [posts, setPosts] = useState<Array<Post>>([]);
-  const fetchPosts = async () => {
-    const posts = await postService.ReadAll();
-    // await postService.Retain(4);
-    setPosts(posts.slice().reverse());
-    logger.info(`fetch ${posts.length} posts`);
+  const startFetchPosts = () => {
+    postService.ReadAll(posts => {
+        // await postService.Retain(4);
+        setPosts(posts.slice().reverse());
+        logger.info(`fetch ${posts.length} posts`);
+    });
   }
   
   useEffect(() => {
@@ -43,7 +44,7 @@ function MainWindow(props: Props) {
       }
     }
     // 获取 posts
-    fetchPosts().catch(error => logger.error("Failed to fetch posts.", error));
+    startFetchPosts();
   }, []);
 
   const Item = (itemInfo: ListRenderItemInfo<Post>) => {
@@ -58,7 +59,7 @@ function MainWindow(props: Props) {
       renderItem={Item}
       keyExtractor={item => item.id.toString()}
       ListHeaderComponent={() => (
-        <Header colorMode={colorMode} width={props.width} afterPost={fetchPosts} />
+        <Header colorMode={colorMode} width={props.width} afterPost={startFetchPosts} />
       )}
     />
   </View>

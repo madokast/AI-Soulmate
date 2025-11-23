@@ -66,13 +66,7 @@ async function GetObject(opts:GetObjectOptions):Promise<Blob> {
     const message = `${method} ${url} ${response.status} ${response.statusText}`
     throw new Error(message);
   }
-  const contentType = response.headers.get(HeaderKey.ContentType) || defaultContentType;
-  const bolbParts:ArrayBuffer[] = []
-  if (response.body) {
-    const buffer = await readStream2buffer(response.body);
-    bolbParts.push(buffer);
-  }
-  return new Blob(bolbParts, { type: contentType });
+  return response.blob();
 }
 
 async function PutObject(opts: PutObjectOptions):Promise<void> {
@@ -186,8 +180,6 @@ async function HeadObject(opts:HeadObjectOptions): Promise<Headers> {
   // Content-Length, Content-Type
   return response.headers;
 }
-
-
 
 export {GetObject, PutObject, AppendObject, HeadObject};
 export type {GetObjectOptions, PutObjectOptions, AppendObjectOptions, HeadObjectOptions};
