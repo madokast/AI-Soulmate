@@ -18,6 +18,7 @@ class AttachmentService {
     let data: Blob | string = await this.fs.read({
       path: `${config.paths.attachment}/${attachment.path}`,
       mediaType: attachment.media_type,
+      cache: true,
     })
     if (attachment.encrypt) {
       if (!attachment.path.endsWith(EncryptedSuffix)) {

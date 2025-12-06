@@ -23,7 +23,8 @@ class PostService {
     }
     this.fs.read({
       path: config.paths.content,
-      mediaType: MediaType.JsonL
+      mediaType: MediaType.JsonL,
+      cache: false,
     }
     ).then(postsBlob => {
       const reader = new FileReader();

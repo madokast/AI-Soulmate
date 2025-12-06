@@ -33,7 +33,8 @@ class HttpAliOssFileSystem implements IFileSystem {
       contentType: mediaType,
       headers: {
         "Range": range
-      }
+      },
+      cache: options.cache,
     };
     return await GetObject(opts);
   }

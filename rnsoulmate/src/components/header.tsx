@@ -43,7 +43,11 @@ function Header(props: Props) {
         medias.push(pickedMedia);
         logger.info(`pickedMedia: ${pickedMedia.name}`)
       }
-      doPost(content, medias).then(props.afterPost);
+      doPost(content, medias)
+        .then(props.afterPost)
+        .catch(e => {
+          logger.error(`submit error: ${e}`)
+        })
     }
   }
 

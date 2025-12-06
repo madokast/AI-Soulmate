@@ -10,6 +10,7 @@ interface ReadOptions {
   offset?: number;
   size?: number;
   mediaType?: string;
+  cache: boolean
 }
 
 interface IFileSystem {

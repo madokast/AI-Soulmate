@@ -21,7 +21,9 @@ interface BaseOptions {
   accessKeySecret:string
 }
 
-interface GetObjectOptions extends BaseOptions {}
+interface GetObjectOptions extends BaseOptions {
+  cache: boolean
+}
 
 interface PutObjectOptions extends BaseOptions {
   data: Blob
@@ -60,6 +62,7 @@ async function GetObject(opts:GetObjectOptions):Promise<Blob> {
       ...headers,
       [HeaderKey.Authorization]: authorization,
       [HeaderKey.XOssDate]: date,
+      [HeaderKey.CacheControl]: opts.cache ? "public, max-age=31536000, s-maxage=2592000, immutable" : "no-store"
     }
   });
   if (!response.ok) {
