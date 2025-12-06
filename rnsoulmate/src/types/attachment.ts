@@ -8,7 +8,7 @@ interface Attachment {
 }
 
 interface AttachmentData extends Attachment {
-  bolb: Blob
+  blob: Blob
 }
 
 export default Attachment;

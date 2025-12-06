@@ -42,7 +42,7 @@ function Attachment(props: Props) {
           });
         }, (error) => logger.error(`load image error: ${error}`));
       };
-      reader.readAsDataURL(data.bolb);
+      reader.readAsDataURL(data.blob);
     }).catch(error => logger.error(`read attachment error: ${error}`));
   }, [])
 

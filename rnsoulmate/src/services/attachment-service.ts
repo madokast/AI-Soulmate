@@ -18,7 +18,7 @@ class AttachmentService {
     })
     return {
       ...attachment,
-      bolb: data
+      blob: data
     }
   }
   public async ReadAll(post: PostType): Promise<AttachmentData[]> {
