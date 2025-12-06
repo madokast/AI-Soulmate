@@ -20,7 +20,7 @@ class PostService {
       callback(this.allPost);
     }
     this.fs.read({
-      path: config.paths.posts,
+      path: config.paths.content,
       mediaType: MediaType.JsonL
     }
     ).then(postsBlob => {
@@ -59,7 +59,7 @@ class PostService {
 
     const post_json = JSON.stringify(post, null, '') // 不换行，不转义
     const data = new Blob([post_json, '\n'], { type: MediaType.JsonL });
-    await this.fs.append(config.paths.posts, data);
+    await this.fs.append(config.paths.content, data);
     this.allPost?.push(post);
   }
   public Retain(count: number) {
@@ -69,7 +69,7 @@ class PostService {
       const posts = this.allPost.map(post => JSON.stringify(post, null, '')).join('\n');
       const data = new Blob([posts, '\n'], { type: MediaType.JsonL });
 
-      this.fs.append(config.paths.posts + ".bak1", data).then(() => {
+      this.fs.append(config.paths.content + ".bak1", data).then(() => {
         logger.info(`Retain ${count} posts`);
       });
     });
