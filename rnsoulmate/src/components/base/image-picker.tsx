@@ -28,7 +28,7 @@ function ImagePicker(props:Props) {
   const setImageUri = (media:Media|null) => {
     const uri = media?.dataUrl;
     setImageUri0(uri ?? DefaultImage);
-    setImageSize(uri ? uri.length : 0);
+    // setImageSize(uri ? uri.length : 0);
     props.picked?.(media); // 通知父组件图片已选择
   }
 
@@ -47,12 +47,14 @@ function ImagePicker(props:Props) {
       } else {
         const uri = response.assets?.[0].uri || null;
         const fileName = response.assets?.[0].fileName || null;
+        const size = response.assets?.[0].fileSize || 0;
         if (uri && fileName) {
           setImageUri({
             name: fileName,
             blob: urltoBlob(uri),
             dataUrl: uri,
           });
+          setImageSize(size);
         } else {
           logger.error('ImagePicker Error: uri is null');
         }
