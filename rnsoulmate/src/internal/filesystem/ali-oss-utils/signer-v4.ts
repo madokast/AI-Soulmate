@@ -23,6 +23,7 @@ enum HeaderKey {
   XOssDate = "x-oss-date", // ISO8601标准时间格式 20250328T101048Z
   XOssContentSha256 = "x-oss-content-sha256", // UNSIGNED-PAYLOAD // 目前只支持UNSIGNED-PAYLOAD
   Authorization = "Authorization",
+  CacheControl = "Cache-Control"
 }
 
 const XOssContentSha256Value = "UNSIGNED-PAYLOAD";

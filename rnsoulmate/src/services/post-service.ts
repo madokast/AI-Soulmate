@@ -5,7 +5,7 @@ import MediaType from "../types/media-types";
 import fs from "../internal/filesystem/current";
 import Attachment from "../types/attachment";
 import { LoggerFactory } from "../internal/logger/logger";
-import { decryptAES, decryptAES2String, encryptAES } from "../internal/crypto";
+import { decryptAES, decryptAES2String, encryptAES, encryptAES2base64 } from "../internal/crypto";
 
 const logger = LoggerFactory.getLogger('PostService')
 
@@ -66,8 +66,8 @@ class PostService {
       if (!aes) {
         throw Error("No AES key found.");
       }
-      const encryptedContent = await encryptAES(new Blob([appendingPost.content]), aes.key);
-      appendingPost.content = await encryptedContent.text();
+      const encryptedContent = await encryptAES2base64(new Blob([appendingPost.content]), aes.key);
+      appendingPost.content = encryptedContent;
       appendingPost.encrypt = aes.name;
     }
 

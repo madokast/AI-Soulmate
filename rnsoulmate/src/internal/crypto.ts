@@ -7,7 +7,7 @@ import CryptoJS from "crypto-js";
  * @param {string} base64key Base64 编码的 128 位（16字节）密钥
  * @returns {Promise<Blob>} 包含 IV 和密文的加密后 Blob
  */
-async function encryptAES(data: Blob, base64key: string): Promise<Blob> {
+async function encryptAES2base64(data: Blob, base64key: string): Promise<string> {
   // 1. 解析密钥并校验长度 (AES-256)
   const key = CryptoJS.enc.Base64.parse(base64key);
   if (key.sigBytes !== 32) {
@@ -15,10 +15,10 @@ async function encryptAES(data: Blob, base64key: string): Promise<Blob> {
   }
   
   // 2. 生成一个随机的 16 字节（128位）的初始化向量 (IV)
-  const iv = CryptoJS.lib.WordArray.random(16);
+  const iv = generateRandomIV() //CryptoJS.lib.WordArray.random(16);
 
   // 3. 将输入的 Blob 转换为 WordArray
-  const dataArrayBuffer = await data.arrayBuffer();
+  const dataArrayBuffer = await blob2ArrayBuffer(data) // data.arrayBuffer();
   const dataWordArray = CryptoJS.lib.WordArray.create(dataArrayBuffer);
 
   // 4. 执行加密
@@ -35,8 +35,14 @@ async function encryptAES(data: Blob, base64key: string): Promise<Blob> {
   // 6. 将拼接后的 WordArray 转换为 Base64 字符串
   const base64combined = CryptoJS.enc.Base64.stringify(combined);
 
-  // 7. 创建并返回最终的 Blob
-   return new Blob([base64combined], { type: "text/plain" });
+  return base64combined
+}
+
+async function encryptAES(data: Blob, base64key: string): Promise<Blob> {
+  const base64combined = await encryptAES2base64(data, base64key);
+
+  // 创建并返回最终的 Blob
+  return new Blob([base64combined], { type: "text/plain" });
 }
 
 /**
@@ -126,5 +132,33 @@ function wordArrayToArrayBuffer(wordArray: CryptoJS.lib.WordArray): ArrayBuffer 
   return buffer;
 }
 
+function generateRandomIV() {
+    const words = [];
+    // 16字节 = 4个32位整数（每个Word占4字节）
+    for (let i = 0; i < 4; i++) {
+        // Math.random() → [0,1) → 乘以 2^32 → 取整为32位无符号整数
+        // 使用 >>> 0 确保结果为无符号32位整数（避免负数）
+        const randomWord = Math.floor(Math.random() * 0x100000000) >>> 0;
+        words.push(randomWord);
+    }
+    // 构建 CryptoJS 格式的 WordArray
+    return CryptoJS.lib.WordArray.create(words, 16);
+}
+
+async function blob2ArrayBuffer(blob:Blob) {
+  const promise = new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => {
+      resolve(reader.result as ArrayBuffer);
+    };
+    reader.onerror = () => {
+      reject(reader.error);
+    }
+    reader.readAsArrayBuffer(blob);
+  });
+  return promise as Promise<ArrayBuffer>;
+}
+
 export { encryptAES, decryptAES };
 export { decryptAES2String, decryptAES2Base64 };
+export { encryptAES2base64 }

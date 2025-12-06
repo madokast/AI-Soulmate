@@ -48,6 +48,8 @@ const defaultConfig = {
   }) => {
     if (is_web) {
       consoleTransport(props as any); // web 环境使用默认控制台传输器
+    } else {
+      consoleTransport(props as any);
     }
     if (props.level.severity >= 2) {
       const time = nowTime();
