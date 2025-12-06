@@ -43,7 +43,7 @@ function Header(props: Props) {
         medias.push(pickedMedia);
         logger.info(`pickedMedia: ${pickedMedia.name}`)
       }
-      doPost(content, medias, false).then(props.afterPost);
+      doPost(content, medias).then(props.afterPost);
     }
   }
 
@@ -114,7 +114,16 @@ function Header(props: Props) {
   );
 }
 
-async function doPost(content:string, medias:Media[], encrypt:boolean) {
+async function doPost(content:string, medias:Media[]) {
+  // do encrypt if content start with "e:"
+  let encrypt = false;
+  if (content.length > 3) {
+    if (content.substring(0, 2) === "e:") {
+      encrypt = true;
+      content = content.substring(2).trimStart();
+    }
+  }
+
   const attachments:Attachment[] = []
   for (const media of medias) {
     const attachment = await attachmentService.Post(media, encrypt)

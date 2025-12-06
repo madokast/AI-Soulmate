@@ -11,7 +11,8 @@
     "attachment": "soulm/files"
   },
   "imageWidth": 100,
-  "aes": {
-    "key-20251027": ""
-  }
+  "aes": [{
+    "name": "key-20251027",
+    "key": ""
+  }]
 }
