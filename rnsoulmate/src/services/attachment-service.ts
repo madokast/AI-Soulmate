@@ -5,7 +5,7 @@ import { IFileSystem } from "../internal/filesystem/file-system";
 import config from "../../config.json";
 import fs from "../internal/filesystem/current";
 import Media from "../types/media";
-import { decryptAES, encryptAES } from "../internal/crypto";
+import { decryptAES2Base64, encryptAES } from "../internal/crypto";
 
 const EncryptedSuffix = ".aes";
 
@@ -15,7 +15,7 @@ class AttachmentService {
     this.fs = fs;
   }
   public async Read(attachment: Attachment) : Promise<AttachmentData>  {
-    let data = await this.fs.read({
+    let data: Blob | string = await this.fs.read({
       path: `${config.paths.attachment}/${attachment.path}`,
       mediaType: attachment.media_type,
     })
@@ -27,11 +27,11 @@ class AttachmentService {
       if (!aes) {
         throw Error("No AES key found.");
       }
-      data = await decryptAES(data, aes.key);
+      data = await decryptAttachmentBlob(data, aes.key, attachment.media_type);
     }
     return {
       ...attachment,
-      blob: data
+      raw: data
     }
   }
   public async ReadAll(post: PostType): Promise<AttachmentData[]> {
@@ -42,6 +42,7 @@ class AttachmentService {
   }
   public async Post(media: Media, encrypt:boolean): Promise<Attachment> {
     let blob = await media.blob;
+    let media_type = blob.type;
     let encryptedSuffix = "";
     let encryptName = undefined;
     if (encrypt) {
@@ -65,10 +66,30 @@ class AttachmentService {
     return {
       path: path,
       name: media.name,
-      media_type: blob.type,
+      media_type: media_type,
       encrypt: encryptName,
     }
   }
+}
+
+async function decryptAttachmentBlob(blob:Blob, key:string, media_type: string): Promise<string> {
+  const readerPromise = new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => {
+      resolve(reader.result as string)
+    };
+    reader.onerror = (error) => {
+      reject(error)
+    };
+    reader.readAsText(blob);
+    ;
+  }) as Promise<string>;
+  const text = await readerPromise;
+  const base64 = await decryptAES2Base64(text, key);
+  // data:image/png;base64,
+  const dataUrl = `data:${media_type};base64,${base64}`;
+  
+  return dataUrl;
 }
 
 function randomWord(length = 6) {

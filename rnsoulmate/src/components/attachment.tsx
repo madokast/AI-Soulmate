@@ -28,22 +28,21 @@ function Attachment(props: Props) {
   const attachment: AttachmentType = props.attachment;
   const [imageSource, setImageSource] = useState(defaultImage)
   useEffect(() => {
-    attachmentService.Read(attachment).then(data => {
-      const reader = new FileReader();
-      reader.onload = function () {
-        const url = reader.result as string;
-        Image.getSize(url, (width0, height0) => {
-          const { width, height } = resizeImage(width0, height0)
-          logger.info(`image size: ${width0}x${height0} -> ${width}x${height}`)
-          setImageSource({
-            uri: url,
-            width: width,
-            height: height,
-          });
-        }, (error) => logger.error(`load image error: ${error}`));
-      };
-      reader.readAsDataURL(data.blob);
-    }).catch(error => logger.error(`read attachment error: ${error}`));
+    readAsDataURL(attachment).then(url => {
+      Image.getSize(url, (width0, height0) => {
+        const { width, height } = resizeImage(width0, height0)
+        logger.info(`image size: ${width0}x${height0} -> ${width}x${height}`)
+        setImageSource({
+          uri: url,
+          width: width,
+          height: height,
+        });
+      }, (error) => {
+        logger.error(`load image error: ${error}`)
+      });
+    }).catch(error => {
+      logger.error(`read attachment error: ${error}`)
+    });
   }, [])
 
   return (
@@ -58,6 +57,24 @@ function Attachment(props: Props) {
       />
     </View>
   );
+}
+
+async function readAsDataURL(attachment: AttachmentType): Promise<string> {
+  const data = await attachmentService.Read(attachment);
+  if (Object.prototype.toString.call(data.raw) === '[object String]') {
+    return data.raw as string;
+  }
+  const readerPromise = new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => {
+      resolve(reader.result as string);
+    };
+    reader.onerror = () => {
+      reject(reader.error);
+    }
+    reader.readAsDataURL(data.raw as Blob);
+  });
+  return readerPromise as Promise<string>;
 }
 
 function resizeImage(width0: number, height0: number) {
@@ -76,4 +93,4 @@ function resizeImage(width0: number, height0: number) {
 }
 
 export default Attachment;
-export {ImageWidth as AttachmentWidth};
+export { ImageWidth as AttachmentWidth };

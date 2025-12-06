@@ -32,11 +32,8 @@ async function encryptAES(data: Blob, base64key: string): Promise<Blob> {
   // 这是关键一步：解密时需要知道加密时用了哪个IV
   const combined = iv.concat(encrypted.ciphertext);
 
-  // 新增一步，将拼接后的 WordArray 转换为 Base64 字符串
+  // 6. 将拼接后的 WordArray 转换为 Base64 字符串
   const base64combined = CryptoJS.enc.Base64.stringify(combined);
-
-  // // 6. 将拼接后的 WordArray 转换回 ArrayBuffer
-  // const combinedArrayBuffer = wordArrayToArrayBuffer(combined);
 
   // 7. 创建并返回最终的 Blob
    return new Blob([base64combined], { type: "text/plain" });
@@ -49,7 +46,7 @@ async function encryptAES(data: Blob, base64key: string): Promise<Blob> {
  * @param {string} base64key Base64 编码的 128 位（16字节）密钥
  * @returns {Promise<Blob>} 解密后的原始 Blob
  */
-async function decryptAES(encryptedData: Blob, base64key: string): Promise<Blob> {
+async function decryptAES0(encryptedData: Blob | string, base64key: string): Promise<CryptoJS.lib.WordArray> {
   // 1. 解析密钥
   const key = CryptoJS.enc.Base64.parse(base64key);
   if (key.sigBytes !== 32) {
@@ -57,7 +54,7 @@ async function decryptAES(encryptedData: Blob, base64key: string): Promise<Blob>
   }
 
   // 2. 将加密的 Blob 转换为 WordArray
-  const base64encryptedData = await encryptedData.text();
+  const base64encryptedData = encryptedData instanceof Blob? await encryptedData.text(): encryptedData;
   const encryptedWordArray = CryptoJS.enc.Base64.parse(base64encryptedData);
 
   // 3. 从数据中分离 IV 和密文
@@ -86,12 +83,29 @@ async function decryptAES(encryptedData: Blob, base64key: string): Promise<Blob>
       throw new Error("Decryption failed. The key may be incorrect or the data corrupted.");
   }
 
-  // 6. 将解密后的 WordArray 转换为 ArrayBuffer
+  return decrypted;
+}
+
+async function decryptAES(encryptedData: Blob | string, base64key: string): Promise<Blob> {
+  const decrypted = await decryptAES0(encryptedData, base64key);
+
   const decryptedArrayBuffer = wordArrayToArrayBuffer(decrypted);
-  
-  // 7. 创建并返回解密后的 Blob
+
+  // 创建并返回解密后的 Blob
   // 注意：我们无法知道原始的MIME类型，所以返回一个通用的Blob
   return new Blob([decryptedArrayBuffer], { type: "application/octet-stream" });
+}
+
+async function decryptAES2String(encryptedData: Blob | string, base64key: string): Promise<string> {
+  const wordArray = await decryptAES0(encryptedData, base64key);
+  const arrayBuffer = wordArrayToArrayBuffer(wordArray);
+  const u8Arr = new Uint8Array(arrayBuffer);
+  return decodeURIComponent(escape(String.fromCharCode(...u8Arr)));
+}
+
+async function decryptAES2Base64(encryptedData: Blob | string, base64key: string): Promise<string> {
+  const wordArray = await decryptAES0(encryptedData, base64key);
+  return CryptoJS.enc.Base64.stringify(wordArray);
 }
 
 /**
@@ -113,3 +127,4 @@ function wordArrayToArrayBuffer(wordArray: CryptoJS.lib.WordArray): ArrayBuffer 
 }
 
 export { encryptAES, decryptAES };
+export { decryptAES2String, decryptAES2Base64 };

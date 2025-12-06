@@ -8,7 +8,8 @@ interface Attachment {
 }
 
 interface AttachmentData extends Attachment {
-  blob: Blob
+  // blob or data-url
+  raw: Blob | string
 }
 
 export default Attachment;

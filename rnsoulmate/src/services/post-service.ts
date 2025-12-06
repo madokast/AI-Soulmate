@@ -5,7 +5,7 @@ import MediaType from "../types/media-types";
 import fs from "../internal/filesystem/current";
 import Attachment from "../types/attachment";
 import { LoggerFactory } from "../internal/logger/logger";
-import { decryptAES, encryptAES } from "../internal/crypto";
+import { decryptAES, decryptAES2String, encryptAES } from "../internal/crypto";
 
 const logger = LoggerFactory.getLogger('PostService')
 
@@ -34,10 +34,14 @@ class PostService {
             .split('\n')                          // 1. 按换行符分割成字符串数组
             .filter(line => line.trim() !== '')   // 2. 过滤掉空行
             .map(line => JSON.parse(line));       // 3. 将每一行JSON字符串解析为对象
-          posts.forEach(post => decryptPost(post));
-          logger.info(`Read ${posts?.length} posts`);
-          this.allPost = posts;
-          callback(posts);
+          // posts.forEach(post => decryptPost(post));
+          Promise.all(posts.map(post => decryptPost(post))).then(_ => {
+            logger.info(`Read ${posts?.length} posts`);
+            this.allPost = posts;
+            callback(posts);
+          }).catch(err => {
+            logger.error(`Error decrypting posts: ${err}`);
+          })
         }
       }
       reader.readAsText(postsBlob);
@@ -76,7 +80,7 @@ class PostService {
   public Retain(count: number) {
     this.ReadAll((allPost) => {
       this.allPost = allPost;
-      this.allPost = this.allPost.slice(0, count);
+      this.allPost = this.allPost.slice(0, this.allPost.length - count - 1);
       this.allPost.forEach(post => encryptPost(post));
       const posts = this.allPost.map(post => JSON.stringify(post, null, '')).join('\n');
       const data = new Blob([posts, '\n'], { type: MediaType.JsonL });
@@ -94,8 +98,9 @@ async function decryptPost(post: PostType): Promise<void> {
     if (!aes) {
       throw Error("No AES key found.");
     }
-    const encryptedContent = new Blob([post.content]);
-    post.content = await decryptAES(encryptedContent, aes.key).then(decrypted => decrypted.text());
+    const decryptString = await decryptAES2String(post.content, aes.key);
+    post.content = decryptString;
+    return;
   }
 }
 
@@ -107,10 +112,11 @@ async function encryptPost(post: PostType): Promise<void> {
     }
     const encryptedContent = await encryptAES(new Blob([post.content]), aes.key);
     post.content = await encryptedContent.text();
+    return;
   }
 }
 
 const postService = new PostService();
-// postService.Retain(4);
+// postService.Retain(1);
 
 export default postService;
