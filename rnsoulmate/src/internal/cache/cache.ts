@@ -41,8 +41,6 @@ class Cache<T extends string | Blob> implements ICache<T> {
   }
 
   async get(key: string, supplier: () => Promise<T>): Promise<T> {
-    await this.init();
-
     const fileId = this.hashKey(key);
     const metaPath = this.metaFilePath(fileId);
     const dataPath = this.binFilePath(fileId);
