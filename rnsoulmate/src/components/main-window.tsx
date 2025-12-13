@@ -28,7 +28,6 @@ function MainWindow(props: Props) {
   const [posts, setPosts] = useState<Array<Post>>([]);
   const startFetchPosts = () => {
     postService.ReadAll(posts => {
-        // await postService.Retain(4);
         setPosts(posts.slice().reverse());
         logger.info(`fetch ${posts.length} posts`);
     });

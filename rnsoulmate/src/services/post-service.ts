@@ -35,12 +35,10 @@ class PostService {
             .split('\n')                          // 1. 按换行符分割成字符串数组
             .filter(line => line.trim() !== '')   // 2. 过滤掉空行
             .map(line => JSON.parse(line));       // 3. 将每一行JSON字符串解析为对象
-          // posts.forEach(post => decryptPost(post));
-          Promise.all(posts.map(post => decryptPost(post))).then(_ => {
-            logger.info(`Read ${posts?.length} posts`);
-            this.allPost = posts;
-            callback(posts);
-          }).catch(err => {
+          logger.info(`Read ${posts?.length} posts`);
+          callback(posts);
+          this.allPost = posts;
+          Promise.all(posts.map(post => decryptPost(post))).catch(err => {
             logger.error(`Error decrypting posts: ${err}`);
           })
         }

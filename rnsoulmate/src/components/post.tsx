@@ -22,6 +22,7 @@ interface Props {
 function Post(props: Props) {
   const post = props.post;
   const time = timestampToDateTime(post.created_at);
+  const encrypted = post.encrypt ? 'E' : '';
   const id = post.id;
 
   const attachmentViews = attachmentView(post.attachments, props.colorMode);
@@ -35,7 +36,7 @@ function Post(props: Props) {
         flex: 1,
       }}>
         <MainText text={post.content} colorMode={props.colorMode} />
-        <SmallText text={`${time} #${id}`} colorMode={props.colorMode} />
+        <SmallText text={`${time} #${id} ${encrypted}`} colorMode={props.colorMode} />
       </View>
       <View>
         {attachmentViews}
