@@ -1,20 +1,33 @@
 import PostType from "../types/post";
 import Attachment from "../types/attachment";
 import { AttachmentData } from "../types/attachment";
-import { IFileSystem } from "../internal/filesystem/file-system";
-import config from "../../config.json";
-import fs from "../internal/filesystem/current";
 import Media from "../types/media";
 import { decryptAES2Base64, encryptAES } from "../internal/crypto";
+
+import fs from "../internal/filesystem/current";
+import config from "../../config.json";
+import { IFileSystem } from "../internal/filesystem/file-system";
+import Cache from "../internal/cache/cache";
 
 const EncryptedSuffix = ".aes";
 
 class AttachmentService {
   private readonly fs:IFileSystem;
+  private cache: Cache<string|Blob>;
   public constructor() {
     this.fs = fs;
+    this.cache = new Cache<string|Blob>("/attachment-service");
   }
+
   public async Read(attachment: Attachment) : Promise<AttachmentData>  {
+    let data = await this.cache.get(attachment.path, () => this.Read0(attachment));
+    return {
+      ...attachment,
+      raw: data
+    }
+  }
+
+  private async Read0(attachment: Attachment) : Promise<Blob|string>  {
     let data: Blob | string = await this.fs.read({
       path: `${config.paths.attachment}/${attachment.path}`,
       mediaType: attachment.media_type,
@@ -30,10 +43,7 @@ class AttachmentService {
       }
       data = await decryptAttachmentBlob(data, aes.key, attachment.media_type);
     }
-    return {
-      ...attachment,
-      raw: data
-    }
+    return data;
   }
   public async ReadAll(post: PostType): Promise<AttachmentData[]> {
     if (!post.attachments) {
@@ -83,7 +93,6 @@ async function decryptAttachmentBlob(blob:Blob, key:string, media_type: string):
       reject(error)
     };
     reader.readAsText(blob);
-    ;
   }) as Promise<string>;
   const text = await readerPromise;
   const base64 = await decryptAES2Base64(text, key);
