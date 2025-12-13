@@ -78,17 +78,17 @@ async function readAsDataURL(attachment: AttachmentType): Promise<string> {
 }
 
 function resizeImage(width0: number, height0: number) {
-  let width = 0;
-  let height = 0;
-  if (width0 > height0) {
-    width = ImageWidth;
-    height = ImageWidth * height0 / width0;
-    height = Math.ceil(height);
-  } else {
-    width = ImageWidth * width0 / height0;
-    height = ImageWidth;
-    width = Math.ceil(width0);
-  }
+  let width: number;
+  let height: number;
+  const maxOriginal = Math.max(width0, height0); // 原始尺寸的最大值
+
+  // 等比缩放：缩放比例 = 目标最大值 / 原始最大值
+  const scaleRatio = ImageWidth / maxOriginal;
+
+  // 按比例计算新尺寸，并取整（确保整数尺寸）
+  width = Math.round(width0 * scaleRatio);
+  height = Math.round(height0 * scaleRatio);
+
   return { width, height };
 }
 
