@@ -5,6 +5,7 @@ import { ColorMode } from "../ui/color-mode-manager";
 interface Props {
   text: string;
   colorMode: ColorMode;
+  selectable?: boolean;
   styles?: StyleProp<TextStyle>;
 }
 
@@ -12,7 +13,10 @@ function MainText(props: Props) {
     const colorMode = props.colorMode;
     const text = props.text;
     return (
-        <Text style={[styles.mainText, styles[colorMode], props.styles]}>{text}</Text>
+        <Text 
+          style={[styles.mainText, styles[colorMode], props.styles]}
+          selectable={true}
+        >{text}</Text>
     );
 }
 
