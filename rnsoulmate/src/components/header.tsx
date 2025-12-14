@@ -26,7 +26,7 @@ function Header(props: Props) {
   const [inputText, setInputText] = React.useState('');
   const [inputHeight, setInputHeight] = React.useState(0);
   const [mediaInputShow, setMediaInputShow] = React.useState(false); // 控制媒体选择器显示
-  const [pickedMedia, setPickedMedia] = React.useState<Media|null>(null); // 已选择的媒体
+  const [pickedMedias, setPickedMedias] = React.useState<Media[]|null>(null); // 已选择的媒体
 
   const onContentSizeChange = (event: NativeSyntheticEvent<TextInputContentSizeChangeEventData>) => {
     setInputHeight(event.nativeEvent.contentSize.height)
@@ -39,15 +39,17 @@ function Header(props: Props) {
     const content = inputText.trim();
     if (content.length > 0) {
       const medias:Media[] = []
-      if (pickedMedia) {
-        medias.push(pickedMedia);
-        logger.info(`pickedMedia: ${pickedMedia.name}`)
+      if (pickedMedias) {
+        medias.push(...pickedMedias);
+        logger.info(`pickedMedias: ${pickedMedias.map(m => m.name).join(', ')}`)
       }
       doPost(content, medias)
         .then(props.afterPost)
         .catch(e => {
           logger.error(`submit error: ${e}`)
         })
+      setInputText('');
+      setPickedMedias(null);
     }
   }
 
@@ -112,7 +114,7 @@ function Header(props: Props) {
         <ImagePicker 
           id="header-image-picker" 
           colorMode={props.colorMode}
-          picked={setPickedMedia}
+          picked={setPickedMedias}
         />)}
     </View>
   );

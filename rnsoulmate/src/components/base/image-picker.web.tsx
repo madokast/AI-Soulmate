@@ -101,6 +101,7 @@ function ImagePicker(props:Props) {
         onPress={pick}
         onLongPress={()=>setImageUri(null)}
         colorMode={props.colorMode}
+        key={source.uri}
       />
       <SmallText
         styles={{

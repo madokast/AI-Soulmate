@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, ViewStyle } from 'react-native';
 
 import {launchImageLibrary, ImageLibraryOptions} from 'react-native-image-picker';
 
@@ -16,27 +16,37 @@ const logger = LoggerFactory.getLogger('ImagePicker');
 interface Props {
   id:string,
   colorMode: ColorMode;
-  picked?:(uri:Media|null)=>void;
+  picked?:(medias:Media[]|null)=>void;
+}
+
+interface RichMedia extends Media {
+  sizeKb: number;
+  width: number;
+  height: number;
+  uri: string;
 }
 
 const ImageWidth = 100;
+const selectionLimit = 9;
+
+const defaultFirstImageSource = {
+  name: 'default',
+  uri:DefaultImage,
+  width:ImageWidth,
+  height:ImageWidth,
+  sizeKb: 0,
+}
 
 function ImagePicker(props:Props) {
-  const [imageUri, setImageUri0] = React.useState<string>(DefaultImage);
-  const [imageSize, setImageSize] = React.useState<number>(0);
-
-  const setImageUri = (media:Media|null) => {
-    const uri = media?.dataUrl;
-    setImageUri0(uri ?? DefaultImage);
-    // setImageSize(uri ? uri.length : 0);
-    props.picked?.(media); // 通知父组件图片已选择
-  }
+  const [images, setImages] = React.useState<RichMedia[]|null>(null);
 
   // select an image
   const pick = () => {
     const options:ImageLibraryOptions = {
-      mediaType: 'photo',
+      mediaType: 'mixed',
       quality: 1,
+      videoQuality: 'high',
+      selectionLimit: selectionLimit,
     };
 
     launchImageLibrary(options, (response) => {
@@ -45,53 +55,74 @@ function ImagePicker(props:Props) {
       } else if (response.errorCode) {
         logger.error('ImagePicker Error: ', response.errorMessage);
       } else {
-        const uri = response.assets?.[0].uri || null;
-        const fileName = response.assets?.[0].fileName || null;
-        const size = response.assets?.[0].fileSize || 0;
-        if (uri && fileName) {
-          setImageUri({
-            name: fileName,
-            blob: urltoBlob(uri),
-            dataUrl: uri,
-          });
-          setImageSize(size);
-        } else {
-          logger.error('ImagePicker Error: uri is null');
+        if (response.assets) {
+          const medias = response.assets.map(asset => {
+            if (asset.fileName && asset.uri) {
+              return {
+                name: asset.fileName,
+                blob: urltoBlob(asset.uri),
+                dataUrl: asset.uri,
+                uri: asset.uri,
+                sizeKb: (asset.fileSize ?? 0) / 1024.,
+                width: ImageWidth,
+                height: ImageWidth,
+              }
+            } else {
+              return null
+            }
+          }).filter((media): media is RichMedia => media !== null);
+          if (medias.length > 0) {
+            props.picked?.(medias);
+            setImages(medias);
+          }
         }
       }
     });
   }
 
-  const source = {
-    uri:imageUri,
-    width:ImageWidth,
-    height:ImageWidth,
-  }
+  const style = StyleSheet.create({
+    container: {
+      flexDirection: 'row',
+    },
+    firstImageStyle : {
+      position: 'relative',
+      width: ImageWidth,
+      height: ImageWidth,
+    }
+  });
 
-  const parentStyle = {
-    ...styles.parent,
-    width: ImageWidth,
-    height: ImageWidth,
-  };
+  const firstImage = images?.[0] || defaultFirstImageSource;
 
-  return (<View id={`image-picker-${props.id}`} style={parentStyle}> 
-      <CustomImage
+  const otherImagesView = images?.slice(1).map((image, index) => (<CustomImage
+        key={index+1}
         width={ImageWidth}
         height={ImageWidth}
-        source={source}
-        onPress={pick}
-        onLongPress={()=>setImageUri(null)}
+        source={image}
         colorMode={props.colorMode}
-      />
-      <SmallText
-        styles={{
-          position: 'absolute',
-          bottom: 0,
-          left: 5,
-        }}
-        text={`${(imageSize / 1024).toFixed(2)}KB`}
-        colorMode={props.colorMode}
-      />
+     />)) ?? []
+
+  return (<View style={style.container}>
+      <View id={`image-picker-${props.id}`} style={style.firstImageStyle}> 
+        <CustomImage
+          key={0}
+          width={ImageWidth}
+          height={ImageWidth}
+          source={firstImage}
+          onPress={pick}
+          onLongPress={()=>setImages(null)}
+          colorMode={props.colorMode}
+        />
+        <SmallText
+          styles={{
+            position: 'absolute',
+            bottom: 0,
+            left: 5,
+          }}
+          text={`${(firstImage.sizeKb).toFixed(2)}KB`}
+          colorMode={props.colorMode}
+        />
+      </View>
+          {otherImagesView}
     </View>
   )
 }
@@ -100,12 +131,5 @@ async function urltoBlob(url: string): Promise<Blob> {
   const res = await fetch(url)
   return res.blob()
 }
-
-const styles = StyleSheet.create({
-  parent: {
-    position: 'relative',
-  }
-});
-
 
 export default ImagePicker;

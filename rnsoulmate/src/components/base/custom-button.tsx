@@ -9,18 +9,21 @@ interface Props {
   onLongPress?: () => void;
   title: string;
   colorMode: ColorMode;
-  width?:DimensionValue;
-  height?:number;
-  borderRadius?:number;
-  paddingBottom?:number;
-  paddingTop?:number;
-  paddingLeft?:number;
-  paddingRight?:number;
+  width?: DimensionValue;
+  height?: number;
+  borderRadius?: number;
+  paddingBottom?: number;
+  paddingTop?: number;
+  paddingLeft?: number;
+  paddingRight?: number;
+  longPressThresholdMs?: number;
 }
+
+const LongPressThresholdMs = 1500; // 长按阈值，单位毫秒
 
 function CustomButton(props: Props) {
   const style = {
-    ...styles.button, 
+    ...styles.button,
     ...styles[props.colorMode],
     width: props.width ?? 32,
     height: props.height ?? 32,
@@ -33,38 +36,14 @@ function CustomButton(props: Props) {
     justifyContent: 'center',
   };
   const [isActive, setActive] = React.useState(false);
-  const [isLongPress, setIsLongPress] = React.useState(false);
-
-  // 按下事件
-  const pressIn = () => {
-    setActive(true);
-  }
-  
-  // 松开事件
-  const pressOut = () => {
-    try {
-      if (!isLongPress) {
-        props.onPress(); // 只有在长按事件未触发时才调用 onPress 事件
-      }
-    } finally {
-      setActive(false);
-      setIsLongPress(false);
-    }
-  }
-
-  const onLongPress = () => {
-    if (props.onLongPress) {
-      setIsLongPress(true);
-      props.onLongPress();
-    }
-  }
-
 
   return (
     <Pressable
-      onPressIn={pressIn}
-      onPressOut={pressOut}
-      onLongPress={onLongPress}
+      onPressIn={() => setActive(true)}
+      onPressOut={() => setActive(false)}
+      onPress={props.onPress}
+      onLongPress={props.onLongPress}
+      delayLongPress={props.longPressThresholdMs ?? LongPressThresholdMs}
       style={[
         style,
         isActive && buttonPressedStyles[props.colorMode], // 按下时的样式

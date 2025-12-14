@@ -29,9 +29,8 @@ function Attachment(props: Props) {
   const [imageSource, setImageSource] = useState(defaultImage)
   useEffect(() => {
     readAsDataURL(attachment).then(url => {
-      Image.getSize(url, (width0, height0) => {
-        const { width, height } = resizeImage(width0, height0)
-        logger.info(`image size: ${width0}x${height0} -> ${width}x${height}`)
+      Image.getSize(url, (width, height) => {
+        logger.info(`image size: ${width}x${height}`)
         setImageSource({
           uri: url,
           width: width,
@@ -48,6 +47,7 @@ function Attachment(props: Props) {
   return (
     <View key={attachment.path}>
       <CustomImage
+        key={attachment.path}
         width={ImageWidth}
         height={ImageWidth}
         borderRadius={10}
@@ -75,21 +75,6 @@ async function readAsDataURL(attachment: AttachmentType): Promise<string> {
     reader.readAsDataURL(data.raw as Blob);
   });
   return readerPromise as Promise<string>;
-}
-
-function resizeImage(width0: number, height0: number) {
-  let width: number;
-  let height: number;
-  const maxOriginal = Math.max(width0, height0); // 原始尺寸的最大值
-
-  // 等比缩放：缩放比例 = 目标最大值 / 原始最大值
-  const scaleRatio = ImageWidth / maxOriginal;
-
-  // 按比例计算新尺寸，并取整（确保整数尺寸）
-  width = Math.round(width0 * scaleRatio);
-  height = Math.round(height0 * scaleRatio);
-
-  return { width, height };
 }
 
 export default Attachment;
