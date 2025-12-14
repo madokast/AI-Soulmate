@@ -26,19 +26,23 @@ function Post(props: Props) {
   const id = post.id;
 
   const attachmentViews = attachmentView(post.attachments, props.colorMode);
-  const attachmentWidth = attachmentViews.length * AttachmentWidth;
 
   logger.trace(`width: ${props.width}`);
   return (
     <View style={[styles.container, styles[props.colorMode]]}>
       <View style={{
-        width: props.width - attachmentWidth,
         flex: 1,
+        minWidth: AttachmentWidth * 2,
       }}>
         <MainText text={post.content} colorMode={props.colorMode} />
         <SmallText text={`${time} #${id} ${encrypted}`} colorMode={props.colorMode} />
       </View>
-      <View>
+      <View style={{
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        justifyContent: 'flex-end',
+        flexShrink: 1,
+      }}>
         {attachmentViews}
       </View>
     </View>
