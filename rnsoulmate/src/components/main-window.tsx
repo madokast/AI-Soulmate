@@ -26,10 +26,14 @@ function MainWindow(props: Props) {
   const indicatorStyle = colorMode === ColorMode.Dark ? 'white' : 'black';
   
   const [posts, setPosts] = useState<Array<Post>>([]);
+  const [refreshing, setRefreshing] = useState<boolean>(false);
+
   const startFetchPosts = () => {
+    setRefreshing(true);
     postService.ReadAll(posts => {
         setPosts(posts.slice().reverse());
         logger.info(`fetch ${posts.length} posts`);
+        setRefreshing(false);
     });
   }
   
@@ -60,6 +64,8 @@ function MainWindow(props: Props) {
       ListHeaderComponent={() => (
         <Header colorMode={colorMode} width={props.width} afterPost={startFetchPosts} />
       )}
+      onRefresh={startFetchPosts}
+      refreshing={refreshing}
     />
   </View>
 }
