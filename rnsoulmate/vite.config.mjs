@@ -28,11 +28,11 @@ export default defineConfig({
       '.json',
     ],
     build: { // 构建单体 HTML
-    // 1. Force Vite to inline assets (images, fonts, etc.) smaller than this limit.
-    // Set to a large number (e.g., 100MB) to ensure everything is inlined.
-    assetsInlineLimit: 100000000, // 100MB
-    // 2. Ensure CSS code splitting is disabled so it can be inlined properly.
-    cssCodeSplit: false,
-  },
+      // 1. Force Vite to inline assets (images, fonts, etc.) smaller than this limit.
+      // Set to a large number (e.g., 100MB) to ensure everything is inlined.
+      assetsInlineLimit: 100000000, // 100MB
+      // 2. Ensure CSS code splitting is disabled so it can be inlined properly.
+      cssCodeSplit: false,
+    },
   },
 });
